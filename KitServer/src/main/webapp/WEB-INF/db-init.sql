@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS user;
+CREATE TABLE user(
+  id BIGINT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  name VARBINARY(16),
+  balance DOUBLE);
+SELECT * FROM user;
+INSERT INTO user (id, name, balance) VALUES (12, 'tanlin2', 1002.5);

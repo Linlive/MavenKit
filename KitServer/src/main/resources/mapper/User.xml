@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="User">
+
+	<typeAlias alias="User" type="com.tanl.kitserver.model.bean.User"/>
+
+	<parameterMap id="usrIn" class="User">
+		<parameter property="name"/>
+		<parameter property="age"/>
+	</parameterMap>
+	<resultMap id="userOut" class="User">
+		<result property="name"/>
+	</resultMap>
+
+	<insert id="insertUser" parameterClass="User" parameterMap="usrIn">	INSERT INTO user (name, age) VALUE (#name#, #age#)</insert>
+	<select id="findUser" resultMap="userOut" parameterMap="usrIn">	SELECT * FROM "user" WHERE name = #name# AND age = #age# </select>
+</sqlMap>
