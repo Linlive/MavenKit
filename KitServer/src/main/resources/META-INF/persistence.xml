@@ -5,7 +5,7 @@
              xsi:schemaLocation=
 		             "http://java.sun.com/xml/ns/persistence
 		              http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-	<persistence-unit name="test-jpa" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="init-jpa" transaction-type="RESOURCE_LOCAL">
 
 		<properties>
 			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>

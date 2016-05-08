@@ -7,7 +7,6 @@
 	<settings lazyLoadingEnabled="true" useStatementNamespaces="false"/>
 	<!--对象映射文件-->
 	<sqlMap resource="./mapper/User.xml"/>
-
-
+	<!--其他更多的对象映射文件将放置在此-->
 
 </sqlMapConfig>

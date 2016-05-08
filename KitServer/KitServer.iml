@@ -10,8 +10,8 @@
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
         <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/resources" />
           <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
         </sourceRoots>
       </configuration>
     </facet>
@@ -36,6 +36,8 @@
         <setting name="provider-name" value="" />
         <datasource-mapping>
           <factory-entry name="containerEntityManagerFactory" />
+          <factory-entry name="entityManagerFactory" />
+          <factory-entry name="init-jpa" value="7f6dd65c-fa1b-4e32-bca5-a92b878bb83f" />
           <factory-entry name="test-jpa" value="07475052-bb1f-4b27-b1fb-5e8266f8b94f" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
@@ -83,9 +85,9 @@
     <orderEntry type="library" name="Maven: org.apache.ibatis:ibatis-core:3.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ibatis:ibatis-sqlmap:2.3.4.726" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ibatis:ibator:1.2.1.681" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.6.2" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.30" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba:druid:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.9" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.6" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.6.6" level="project" />
   </component>

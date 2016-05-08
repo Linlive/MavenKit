@@ -3,16 +3,51 @@
 		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="User">
 
-	<typeAlias alias="User" type="com.tanl.kitserver.model.bean.User"/>
+	<typeAlias alias="User" type="com.tanl.kitserver.model.bean.UserDO"/>
 
-	<parameterMap id="usrIn" class="User">
-		<parameter property="name"/>
-		<parameter property="age"/>
+	<parameterMap id="db_param" class="User">
+		<parameter property="userId"/>
+		<parameter property="userPassword"/>
+		<parameter property="userName" />
+		<parameter property="userAge"/>
+		<parameter property="userPhoneNumber"/>
+		<parameter property="userEmailAddress"/>
 	</parameterMap>
-	<resultMap id="userOut" class="User">
-		<result property="name"/>
+
+	<resultMap id="resultOut" class="User">
+		<result property="userName" />
 	</resultMap>
 
-	<insert id="insertUser" parameterClass="User" parameterMap="usrIn">	INSERT INTO user (name, age) VALUE (#name#, #age#)</insert>
-	<select id="findUser" resultMap="userOut" parameterMap="usrIn">	SELECT * FROM "user" WHERE name = #name# AND age = #age# </select>
+	<parameterMap id="paramTest" class="HashMap">
+		<parameter property="userName" javaType="String"/>
+	</parameterMap>
+
+	<!--<statement id="createTable" parameterClass="User">-->
+		<!--CREATE TABLE tb_user(-->
+			<!--id BIGINT IDENTITY NOT NULL PRIMARY KEY,-->
+			<!--u_Id VARCHAR(20) ,-->
+			<!--u_password VARCHAR(25),-->
+			<!--u_name VARCHAR(20),-->
+			<!--u_age TINYINT,-->
+			<!--u_phone VARCHAR(12),-->
+			<!--u_emailAddress VARCHAR(20)-->
+		<!--)-->
+	<!--</statement>-->
+
+
+	<insert id="insertUser" parameterClass="User">
+		INSERT INTO tb_user (userName , userPassword) VALUES ( #userName#, #userPassword#)
+		<selectKey resultClass="int" keyProperty="id">SELECT @@IDENTITY</selectKey>
+	</insert>
+	<!--<select id="findUser" resultMap="resultOut" parameterClass="String">-->
+		<!--SELECT u FROM user u WHERE (u.u_id = #userId#) OR (u.u_id = #id#)-->
+	<!--</select>-->
+
+	<select id="getUserInfo" parameterClass="map" resultClass="User">
+		SELECT * FROM tb_user WHERE userName = #userName#
+	</select>
+	<select id="getAllUser" resultClass="User">
+		SELECT * FROM tb_user
+	</select>
+
 </sqlMap>

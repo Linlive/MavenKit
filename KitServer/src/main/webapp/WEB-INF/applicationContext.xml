@@ -7,9 +7,10 @@
 
 	<context:component-scan base-package="com.tanl.kitserver"/>
 	<context:annotation-config/>
+
 	<!--JDBC 配置文件-->
 	<context:property-placeholder location="classpath:properties/jdbc.properties"/>
-
+	<!--ibatis-->
 	<!--data source 数据库-->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${jdbc_driverClassName}"/>
@@ -39,8 +40,11 @@
 		<property name="sqlMapClient" ref="sqlMapClient"/>
 	</bean>
 
+	<!--hibernate operation-->
+	<!--<bean id="context" class="com.tanl.kitserver.conf.JPAConfiguration"/>-->
+
 	<!--数据层处理对象-->
-	<bean id="userDao" class="com.tanl.kitserver.dao.impl.UserDaoImp" autowire="byName"/>
+	<bean id="userDao" class="com.tanl.kitserver.dao.impl.UserDaoImp"/>
 
 
 

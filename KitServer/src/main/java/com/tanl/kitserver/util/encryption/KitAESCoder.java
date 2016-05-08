@@ -6,6 +6,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -39,6 +40,9 @@ public class KitAESCoder extends KeyEncrypt {
 	public static final int SALT_LEN = 16;
 
 	private static final String IV_PARAMETER_SPEC = "abcdefghabcdefgh";
+	private static final String PRIVATE_KEY = "KIT_SERVER_ABCDE";
+	//实例化加密类需要的的参数
+	private static final String INITIALIZE_PARAM = "AES/CBC/PKCS5Padding";
 	private static AlgorithmParameters param;
 	private static final String MAGIC_STRING = "PBKDF2WithHmacSHA1";//"PBEWITHMD5andDES";//
 	private static final int KEY_LEN_BITS = 128; // see notes below where this is used.
@@ -54,40 +58,11 @@ public class KitAESCoder extends KeyEncrypt {
 	 * @throws Exception
 	 */
 	public static String encrypt(String cleartext, String privateKey) throws Exception{
-		byte[] bytes = encrypt(cleartext.getBytes("UTF-8"), initKey(privateKey));
+		byte[] bytes = encrypt(cleartext.getBytes("UTF-8"), privateKey);
 		return encryptBASE64(bytes);
 	}
 	public static String encrypt(String cleartext) throws Exception{
-		return encrypt(cleartext, PUBLIC_KEY);
-	}
-
-	/**
-	 * http://www.cnblogs.com/lianghui66/archive/2013/03/07/2948494.html
-	 * */
-	public static String encrypt(String cleartext, boolean flag) throws Exception{
-
-		String text = "abcdefg";   //要加密的字符串
-
-		String key = "lianghuilonglong"; //私钥   AES固定格式为128/192/256 bits.即：16/24/32bytes。DES固定格式为128bits，即8bytes。
-
-		String iv   = "aabbccddeeffgghh";//初始化向量参数，AES 为16bytes. DES 为8bytes.
-
-
-
-		Key keySpec = new SecretKeySpec(key.getBytes(), "AES");    //两个参数，第一个为私钥字节数组， 第二个为加密方式 AES或者DES
-
-		IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes());
-
-		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); //实例化加密类，参数为加密方式，要写全
-
-		cipher.init(Cipher.ENCRYPT_MODE,  keySpec, ivSpec);           //初始化，此方法可以采用三种方式，按服务器要求来添加。（1）无第三个参数（2）第三个参数为SecureRandom random = new SecureRandom();中random对象，随机数。(AES不可采用这种方法)（3）采用此代码中的IVParameterSpec
-//		cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-
-//		SecureRandom random = new SecureRandom();
-
-//		cipher.init(Cipher.ENCRYPT_MODE, keySpec, random);
-		return encryptBASE64(cipher.doFinal());
-//		return encrypt(cleartext, PUBLIC_KEY);
+		return encrypt(cleartext, PRIVATE_KEY);
 	}
 
 	/**
@@ -100,11 +75,11 @@ public class KitAESCoder extends KeyEncrypt {
 	 */
 	public static String decrypt(String ciphertext, String privateKey) throws Exception{
 		byte[] passwordFirst = decryptBASE64(ciphertext);
-		byte[] passwordSecond = decrypt(passwordFirst, initKey(privateKey));
+		byte[] passwordSecond = decrypt(passwordFirst, privateKey);
 		return new String(passwordSecond, "UTF-8");
 	}
 	public static String decrypt(String ciphertext) throws Exception{
-		return decrypt(ciphertext, PUBLIC_KEY);
+		return decrypt(ciphertext, PRIVATE_KEY);
 	}
 
 
@@ -112,34 +87,34 @@ public class KitAESCoder extends KeyEncrypt {
 	 * encode
 	 *
 	 * @param data the real value.
-	 * @param key  key
+	 * @param keyIv  key
 	 * @return the password value.
 	 * @throws Exception
 	 */
-	public static byte[] encrypt (byte[] data, String key) throws Exception {
+	public static byte[] encrypt (byte[] data, String keyIv) throws Exception {
 
-		Key k = toKey((key));
-		/*AES/CBC/PKCS5Padding*/
-		Cipher cipher = Cipher.getInstance(ALGORITHM);
-//		IvParameterSpec iv = new IvParameterSpec("abcdefghabcdefgh".getBytes());
+		IvParameterSpec ivSpace = new IvParameterSpec(keyIv.getBytes());
+		Cipher cipher = Cipher.getInstance(INITIALIZE_PARAM);
+		Key k = inKey(keyIv);
 		param = cipher.getParameters();
-		cipher.init(Cipher.ENCRYPT_MODE, k, param);
-//		cipher.init(Cipher.ENCRYPT_MODE, k, iv);
+		cipher.init(Cipher.ENCRYPT_MODE, k, ivSpace);
 		return cipher.doFinal(data);
 	}
 	/**
 	 * decode
 	 *
 	 * @param data the password value.
-	 * @param key  key
+	 * @param keyIv  key
 	 * @return the real value
 	 * @throws Exception
 	 */
-	public static byte[] decrypt (byte[] data, String key) throws Exception {
+	public static byte[] decrypt (byte[] data, String keyIv) throws Exception {
 
-		Key k = toKey((key));
-		Cipher cipher = Cipher.getInstance(ALGORITHM);
-		cipher.init(Cipher.DECRYPT_MODE, k, param);
+		IvParameterSpec ivSpace = new IvParameterSpec(keyIv.getBytes());
+		Cipher cipher = Cipher.getInstance(INITIALIZE_PARAM);
+		Key k = inKey(keyIv);
+		param = cipher.getParameters();
+		cipher.init(Cipher.DECRYPT_MODE, k, ivSpace);
 		return cipher.doFinal(data);
 	}
 
@@ -162,6 +137,11 @@ public class KitAESCoder extends KeyEncrypt {
 	public static String initKey(String seed) throws Exception {
 
 		return initKey(seed, ALGORITHM);
+	}
+	//key 私钥
+	private static Key inKey(String key) throws UnsupportedEncodingException {
+		//两个参数，第一个为私钥字节数组， 第二个为加密方式 AES或者DES
+		return new SecretKeySpec(key.getBytes("utf-8"), ALGORITHM);
 	}
 
 	/**

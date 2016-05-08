@@ -11,6 +11,7 @@ public class TomcatListener implements ServletContextListener{
 	public void contextInitialized (ServletContextEvent servletContextEvent) {
 		System.out.println("............tomcat initial..............");
 		new InitServer().createContext();
+//		new InitServer().initContext();
 		System.out.println("............tomcat initialized..............");
 	}
 

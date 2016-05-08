@@ -1,6 +1,10 @@
 package com.tanl.kitserver.dao;
 
-import com.tanl.kitserver.model.bean.User;
+import com.tanl.kitserver.model.bean.UserDO;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户数据库
@@ -8,7 +12,8 @@ import com.tanl.kitserver.model.bean.User;
  */
 //@Component
 public interface UserDao {
-	void insert(User user);
-	void save(User user);
-	void query(Object param);
+	int insert(UserDO user) throws SQLException;
+	//UserDO queryUser(UserDO userDO) throws SQLException;
+	UserDO queryUserInfo(Map param) throws SQLException;
+	List<UserDO> queryAllUser(Map param) throws SQLException;
 }

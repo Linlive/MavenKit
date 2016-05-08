@@ -1,14 +1,5 @@
 package test;
 
-import com.tanl.kitserver.model.bean.User;
-import com.tanl.kitserver.service.UserService;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
-import java.io.IOException;
-import java.io.Reader;
-
 /**
  * Created by Administrator on 2016/4/26.
  */
@@ -45,18 +36,18 @@ public class AllTest {
 //
 //		entityTransaction.commit();
 //		entityManager.close();
-		UserService us;
-		Reader reader = null;
-		SqlSessionFactory sqlSessionFactory = null;
-		try {
-			 reader = Resources.getResourceAsReader("conf/mybatis-config.xml");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
-		User user = new User();
-		user.setName("cc");
-		user.setAge(22);
-		sqlSessionFactory.openSession().insert("insertUser");
+
+		//mybatis operation
+//		UserService us;
+//		Reader reader = null;
+//		SqlSessionFactory sqlSessionFactory = null;
+//		try {
+//			 reader = Resources.getResourceAsReader("conf/mybatis-config.xml");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+//		UserDO user = new UserDO();
+//		sqlSessionFactory.openSession().insert("insertUser");
 	}
 }

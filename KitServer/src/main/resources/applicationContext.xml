@@ -28,6 +28,7 @@
 		<property name="maxWait" value="${maxWait}"/>
 	</bean>
 
+
 	<!-- 配置SqlMapClient对象 -->
 	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
 		<property name="configLocation" value="classpath:conf/SqlMapConfig.xml"/>
@@ -39,6 +40,7 @@
 		<property name="sqlMapClient" ref="sqlMapClient"/>
 	</bean>
 
+
 	<!--数据层处理对象-->
 	<bean id="userDao" class="com.tanl.kitserver.dao.impl.UserDaoImp" autowire="byName"/>
 
@@ -49,9 +51,9 @@
 
 
 	<!-- 配置事务管理器 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"/>
-	</bean>
+	<!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+		<!--<property name="dataSource" ref="dataSource"/>-->
+	<!--</bean>-->
 
 
 	<!-- 启动spring事务注解，事务注解尽在此 -->

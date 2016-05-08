@@ -1,6 +1,5 @@
 package com.tanl.kitserver.util.encryption;
 
-import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.crypto.KeyGenerator;
@@ -43,6 +42,7 @@ public abstract class KitCoder {
 	 */
 	public static String encryptBASE64 (byte[] key) {
 
+//		return new String(Base64.encode(key, 0));
 		return (new BASE64Encoder()).encodeBuffer(key);
 	}
 
@@ -55,7 +55,8 @@ public abstract class KitCoder {
 	 */
 	public static byte[] decryptBASE64 (String key) throws IOException {
 
-		return (new BASE64Decoder()).decodeBuffer(key);
+		return Base64.decode(key, 1);
+//		return (new BASE64Decoder()).decodeBuffer(key);
 	}
 
 	public static String encryptMD5(String data) throws Exception{
