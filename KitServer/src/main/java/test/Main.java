@@ -1,6 +1,6 @@
 package test;
 
-import com.tanl.kitserver.util.encryption.KitCoder;
+import com.tanl.kitserver.util.encryption.KitAESCoder;
 
 /**
  * --
@@ -23,17 +23,18 @@ public class Main {
 //		System.out.println(a + "\n" + b);
 
 //		String password2 = "p?./a)_85545afasoin_+)_)(wodda889745rd/.,.154";
-		String password = "a12";//.substring(0, 16);
-		String md5 = KitCoder.encryptMD5(password);
+		String password = "aa";//.substring(0, 16);
+//		String md5 = KitCoder.encryptMD5(password);
 //		String des = KitDESCoder.encrypt(password);
-//		String aes = KitAESCoder.encrypt(password);
+		String aes = KitAESCoder.encrypt(password);
+
 ////
 //		System.out.println("原文" + password);
 ////
-		System.out.println("MD5 加密密文：" + md5 + "length = " + md5.length());
+//		System.out.println("MD5 加密密文：" + md5 + "length = " + md5.length());
 ////		System.out.println("DES 加密密文：" + des + "length = " + des.length());
 ////
-//		System.out.println("AES 加密密文：" + aes);
+		System.out.println("AES 加密密文:" + aes + "a");
 //		System.out.println("解密\t" + KitAESCoder.decrypt(aes));
 
 //		System.out.println(KitAESCoder.encrypt("aa", true));

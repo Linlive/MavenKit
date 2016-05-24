@@ -7,9 +7,10 @@
 
 	<context:component-scan base-package="com.tanl.kitserver"/>
 	<context:annotation-config/>
-	<!--JDBC 配置文件-->
-	<context:property-placeholder location="properties/jdbc.properties"/>
 
+	<!--JDBC 配置文件-->
+	<context:property-placeholder location="classpath:properties/jdbc.properties"/>
+	<!--ibatis-->
 	<!--data source 数据库-->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${jdbc_driverClassName}"/>
@@ -28,7 +29,6 @@
 		<property name="maxWait" value="${maxWait}"/>
 	</bean>
 
-
 	<!-- 配置SqlMapClient对象 -->
 	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
 		<property name="configLocation" value="classpath:conf/SqlMapConfig.xml"/>
@@ -40,20 +40,30 @@
 		<property name="sqlMapClient" ref="sqlMapClient"/>
 	</bean>
 
+	<!--hibernate operation-->
+	<!--<bean id="context" class="com.tanl.kitserver.conf.JPAConfiguration"/>-->
 
 	<!--数据层处理对象-->
-	<bean id="userDao" class="com.tanl.kitserver.dao.impl.UserDaoImp" autowire="byName"/>
+	<bean id="userDao" class="com.tanl.kitserver.dao.impl.UserDaoImp"/>
+	<bean id="adminDao" class="com.tanl.kitserver.dao.impl.AdminDaoImpl"/>
+	<bean id="goodsDao" class="com.tanl.kitserver.dao.impl.GoodsDaoImpl"/>
+	<bean id="goodsImgPathDao" class="com.tanl.kitserver.dao.impl.GoodsImgPathDaoImpl"/>
 
 
 
+	<!--服务中间层-->
+	<bean id="userService" class="com.tanl.kitserver.service.impl.UserServiceImpl"/>
+	<bean id="adminService" class="com.tanl.kitserver.service.impl.AdminServiceImpl"/>
+	<bean id="goodsService" class="com.tanl.kitserver.service.impl.GoodsServiceImpl"/>
+	<bean id="goodsImgsService" class="com.tanl.kitserver.service.impl.GoodsImgsServiceImpl"/>
 
 
 
 
 	<!-- 配置事务管理器 -->
-	<!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
-		<!--<property name="dataSource" ref="dataSource"/>-->
-	<!--</bean>-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
 
 
 	<!-- 启动spring事务注解，事务注解尽在此 -->

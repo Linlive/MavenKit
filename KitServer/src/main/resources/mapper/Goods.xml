@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Goods">
+	<typeAlias alias="Goods" type="com.tanl.kitserver.model.bean.GoodsDo"/>
+	<insert id="insertGoods" parameterClass="Goods">
+		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice)
+		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#);
+	</insert>
+
+	<insert id="insertGoods1" parameterClass="Goods">
+		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice)
+		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#);
+	</insert>
+
+	<select id="queryBrand" parameterClass="java.lang.String" resultClass="Integer">
+		SELECT brandId FROM tb_goods_brand WHERE brandName LIKE '$brandValue$'
+	</select>
+	<select id="queryType" parameterClass="java.lang.String" resultClass="Integer">
+	SELECT typeId FROM tb_goods_type WHERE typeName LIKE '$typeValue$'
+		</select>
+	<select id="querySize" parameterClass="java.lang.String" resultClass="Integer">
+		SELECT sizeId FROM tb_goods_size WHERE sizeValue LIKE #sizeValue#
+	</select>
+	<select id="queryColor" parameterClass="java.lang.String" resultClass="Integer">
+		SELECT colorId FROM tb_goods_color WHERE colorValue LIKE #colorValue#
+	</select>
+
+
+	<select id="queryGoodsById">
+		SELECT * FROM tb_goods WHERE goodsId = #goodsId#
+	</select>
+	<select id="queryGoodsByShopKeeper" parameterClass="Goods">
+		SELECT * FROM tb_goods WHERE shopKeeperId = #shopKeeperId#
+	</select>
+
+</sqlMap>

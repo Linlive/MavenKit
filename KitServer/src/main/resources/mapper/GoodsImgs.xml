@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Goods">
+	<parameterMap id="goods_param" class="List">
+		<parameter property="goodId" javaType="java.lang.String"/>
+		<parameter property="goodImgs" javaType="java.util.ArrayList"/>
+	</parameterMap>
+	<parameterMap id="goods_param_single" class="java.util.HashMap">
+		<parameter property="goodsId" javaType="java.lang.String"/>
+		<parameter property="imgPath" javaType="java.lang.String"/>
+	</parameterMap>
+
+	<insert id="addImgs" parameterMap="goods_param">
+		insert into tb_goods_img (goodsId, goodsImgRootPath) values (#goodsId#, <iterate conjunction="," open="(" close=")">
+		#goodImgs[]#
+		</iterate>);
+	</insert>
+	<insert id="addImgsSingle" parameterClass="java.util.HashMap">
+		INSERT INTO tb_goods_img (goodsId, goodsImgRootPath) VALUES (#goodsId#, #imgPath#)
+	</insert>
+
+</sqlMap>

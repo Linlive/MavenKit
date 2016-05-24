@@ -2,9 +2,11 @@ package com.tanl.kitserver.dao.impl;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.tanl.kitserver.dao.UserDao;
-import com.tanl.kitserver.model.bean.UserDO;
+import com.tanl.kitserver.model.bean.UserDo;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;
+import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.Map;
  * Created by Administrator on 2016/5/1.
  */
 
-public class UserDaoImp implements UserDao {
+public class UserDaoImp extends SqlMapClientDaoSupport implements UserDao {
 
 	@Resource(name = "sqlMapClient")
 	private SqlMapClient sqlMapClient;
@@ -24,14 +26,19 @@ public class UserDaoImp implements UserDao {
 	@Resource(name = "sqlMapClientTemplate")
 	SqlMapClientTemplate sqlMapClientTemplate;
 
-	public int insert (UserDO user) throws SQLException {
+	@PostConstruct
+	public void initSqlMapClient(){
+		super.setSqlMapClient(sqlMapClient);
+	}
+
+	public int insert (UserDo user) throws SQLException {
 
 		Object o = sqlMapClient.insert("insertUser", user);
 		System.out.println(o.toString());
 		return Integer.valueOf(o.toString());
 	}
 
-	public UserDO queryUser (UserDO userDo) throws SQLException {
+	public UserDo queryUser (UserDo userDo) throws SQLException {
 
 //		List users = sqlMapClient.queryForList("queryUserInfoAll", userDo);
 		List users = sqlMapClientTemplate.queryForList("queryUserInfoAll", userDo);
@@ -41,20 +48,20 @@ public class UserDaoImp implements UserDao {
 
 	}
 
-	public UserDO queryUserInfo (Map map) throws SQLException {
+	public UserDo queryUserInfo (Map map) throws SQLException {
 
-		return (UserDO) sqlMapClient.queryForObject("getUserInfo", map);
+		return (UserDo) sqlMapClient.queryForObject("getUserInfo", map);
 	}
 
-	public List<UserDO> queryAllUser (Map map) throws SQLException {
+	public List<UserDo> queryAllUser (Map map) throws SQLException {
 
-		List userDOs = sqlMapClient.queryForList("getUserInfoAll", map);
-		ArrayList<UserDO> arrys = new ArrayList<UserDO>();
+		List userDOs = sqlMapClient.queryForList("getAllUser", map);
+		ArrayList<UserDo> arrys = new ArrayList<UserDo>();
 		Iterator iterator = userDOs.iterator();
-		UserDO userDO = null;
+		UserDo userDo = null;
 		while (iterator.hasNext()){
-			userDO = (UserDO) iterator.next();
-			arrys.add(userDO);
+			userDo = (UserDo) iterator.next();
+			arrys.add(userDo);
 		}
 		return arrys;
 	}

@@ -1,7 +1,5 @@
 package com.tanl.kitserver.util.encryption;
 
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -42,8 +40,8 @@ public abstract class KitCoder {
 	 */
 	public static String encryptBASE64 (byte[] key) {
 
-//		return new String(Base64.encode(key, 0));
-		return (new BASE64Encoder()).encodeBuffer(key);
+		return new String(Base64.encode(key, 1));
+//		return (new BASE64Encoder()).encodeBuffer(key);
 	}
 
 	/**

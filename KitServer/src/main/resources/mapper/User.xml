@@ -3,15 +3,15 @@
 		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="User">
 
-	<typeAlias alias="User" type="com.tanl.kitserver.model.bean.UserDO"/>
+	<typeAlias alias="User" type="com.tanl.kitserver.model.bean.UserDo"/>
 
 	<parameterMap id="db_param" class="User">
 		<parameter property="userId"/>
 		<parameter property="userPassword"/>
 		<parameter property="userName" />
 		<parameter property="userAge"/>
-		<parameter property="userPhoneNumber"/>
-		<parameter property="userEmailAddress"/>
+		<parameter property="userPhone"/>
+		<parameter property="userEmail"/>
 	</parameterMap>
 
 	<resultMap id="resultOut" class="User">
@@ -36,7 +36,7 @@
 
 
 	<insert id="insertUser" parameterClass="User">
-		INSERT INTO tb_user (userName , userPassword) VALUES ( #userName#, #userPassword#)
+		INSERT INTO tb_user (userId, userName , userPassword) VALUES (#userName#, #userName#, #userPassword#)
 		<selectKey resultClass="int" keyProperty="id">SELECT @@IDENTITY</selectKey>
 	</insert>
 	<!--<select id="findUser" resultMap="resultOut" parameterClass="String">-->

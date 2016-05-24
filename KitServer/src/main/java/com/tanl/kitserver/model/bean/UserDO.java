@@ -5,7 +5,7 @@ package com.tanl.kitserver.model.bean;
  * 数据库中的表
  * Created by Administrator on 2016/5/1.
  */
-public class UserDO {
+public class UserDo {
 
 	private int id;
 
@@ -16,10 +16,16 @@ public class UserDO {
 	 * 必须为Integer,否则数据库查询异常
 	 */
 	private Integer userAge;
-	private String userPhoneNumber;
-	private String userEmailAddress;
+	private String userPhone;
+	private String userEmail;
 	private String userSex;
+	private boolean shopKeeper;
 
+	private int permissionLevel;
+
+	public UserDo(){
+
+	}
 	/**
 	 * 数据库字段，不提供外部设置，仅能获取该值
 	 * @return
@@ -74,24 +80,24 @@ public class UserDO {
 		this.userAge = userAge;
 	}
 
-	public String getUserPhoneNumber () {
+	public String getUserPhone () {
 
-		return userPhoneNumber;
+		return userPhone;
 	}
 
-	public void setUserPhoneNumber (String userPhoneNumber) {
+	public void setUserPhone (String userPhone) {
 
-		this.userPhoneNumber = userPhoneNumber;
+		this.userPhone = userPhone;
 	}
 
-	public String getUserEmailAddress () {
+	public String getUserEmail () {
 
-		return userEmailAddress;
+		return userEmail;
 	}
 
-	public void setUserEmailAddress (String userEmailAddress) {
+	public void setUserEmail (String userEmail) {
 
-		this.userEmailAddress = userEmailAddress;
+		this.userEmail = userEmail;
 	}
 
 	public String getUserSex () {
@@ -102,5 +108,25 @@ public class UserDO {
 	public void setUserSex (String userSex) {
 
 		this.userSex = userSex;
+	}
+
+	public boolean isShopKeeper () {
+
+		return shopKeeper;
+	}
+
+	public void setShopKeeper (boolean shopKeeper) {
+
+		this.shopKeeper = shopKeeper;
+	}
+
+	public int getPermissionLevel () {
+
+		return permissionLevel;
+	}
+
+	public void setPermissionLevel (int permissionLevel) {
+
+		this.permissionLevel = permissionLevel;
 	}
 }

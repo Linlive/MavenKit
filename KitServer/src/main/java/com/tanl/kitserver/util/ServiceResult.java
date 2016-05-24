@@ -13,6 +13,7 @@ public class ServiceResult<T> {
 
 	private Integer total;
 
+	// common info
 	private Boolean success;
 
 	private String errorCode;

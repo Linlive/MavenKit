@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap >
+	<typeAlias alias="" type=""/>
+
+	<insert id="insertApp">
+		INSERT INTO tb_user_application (userId, applicateTime, applicationType) VALUES (#userId#, CURRENT_TIMESTAMP , 1)
+	</insert>
+	<update id="updateApp">
+		UPDATE tb_user_application SET applicationState = ## WHERE userId = #userId#
+	</update>
+	<delete id="deleteApp">
+		DELETE FROM tb_user_application WHERE userId = #userId#
+	</delete>
+</sqlMap>

@@ -1,10 +1,37 @@
 package test;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Created by Administrator on 2016/4/26.
  */
 public class AllTest {
-	public static void main(String[] args) {
+
+	public static void main (String[] args) {
+
+		ExecutorService cache = Executors.newFixedThreadPool(10);
+		for (int i = 1; i <= 100; i++) {
+			final int index = i;
+
+			cache.execute(new Runnable() {
+				public void run () {
+					try {
+						Thread.sleep(5000);
+
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					String threadName = Thread.currentThread().getName();
+					System.out.println(threadName + " execute " + index);
+
+				}
+			});
+		}
+	}
+}
+
+
 //		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ConfigureForPool2.class);
 //
 //		AccountDao accountDao = applicationContext.getBean(AccountDao.class);
@@ -37,7 +64,7 @@ public class AllTest {
 //		entityTransaction.commit();
 //		entityManager.close();
 
-		//mybatis operation
+//mybatis operation
 //		UserService us;
 //		Reader reader = null;
 //		SqlSessionFactory sqlSessionFactory = null;
@@ -47,7 +74,7 @@ public class AllTest {
 //			e.printStackTrace();
 //		}
 //		sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
-//		UserDO user = new UserDO();
+//		UserDo user = new UserDo();
 //		sqlSessionFactory.openSession().insert("insertUser");
-	}
-}
+//	}
+//}

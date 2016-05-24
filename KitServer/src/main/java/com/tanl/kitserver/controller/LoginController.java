@@ -1,6 +1,8 @@
 package com.tanl.kitserver.controller;
 
-import com.tanl.kitserver.model.bean.UserDO;
+import com.tanl.kitserver.model.bean.AdminDo;
+import com.tanl.kitserver.model.bean.UserDo;
+import com.tanl.kitserver.service.AdminService;
 import com.tanl.kitserver.service.UserService;
 import com.tanl.kitserver.util.ServiceResult;
 import com.tanl.kitserver.util.common.Client;
@@ -30,85 +32,129 @@ public class LoginController {
 	@Autowired
 	ApplicationContext context;
 
-	final boolean login_status_success = true;
-	final boolean login_status_failed = false;
-	String login_status_failed_info = "PASSWORD";
+	final boolean LOGIN_STATUS_SUCCESS = true;
+	final boolean LOGIN_STATUS_FAILED = false;
 
-	UserService userService;
+	private UserService userService;
+	private AdminService adminService;
 
+	private final int PASSWORD_MAX_LENGTH = 60;
 
-	static int i = 1;
 
 	@RequestMapping(value = "/login")
 	public void login (HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		JSONObject jsonObject;
-		UserDO clientUser = getInfo(request);
+		userService = (UserService) context.getBean("userService");
+		adminService = (AdminService) context.getBean("adminService");
+
+		UserDo clientUser = getInfo(request);
 		if (clientUser == null) return;
 
 		checkFormat(clientUser, response);
-		ClientInfoObj<JSONObject> infoObj = new ClientInfoObj<JSONObject>();
-		ServiceResult<UserDO> result = checkDbOk(clientUser, request, response);
+		if(clientUser.getPermissionLevel() == 0){
+			handleAdmin(clientUser, request, response);
+			return;
+		}
+
+		ServiceResult<UserDo> result = checkDbOk(clientUser, request, response);
 
 		if (result == null) return;
 
-		jsonObject = new JSONObject();
-		UserDO userDB = result.getData();
+		UserDo userDB = result.getData();
 		boolean notFound = userDB == null;
 
 		if (notFound) {
-			jsonObject.put("status", login_status_failed);
-			jsonObject.put("message", "userNotExist");
-
-			infoObj.setData(jsonObject);
-			infoObj.setErrorCode(0);
-			infoObj.setDigestMessage("userNotExist");
-			infoObj.setOperateSuccess(true);
-			Client.writeToClient(response.getWriter(), infoObj);
+			handleNotFond(response);
 			return;
 		}
-		String userRequestPassword = clientUser.getUserPassword();
-
-		if (!userRequestPassword.equals(userDB.getUserPassword())) {//密码不匹配
-			jsonObject.put("status", login_status_failed);
-			jsonObject.put("message", "passwordNotMatch");
-			infoObj.setData(jsonObject);
-			infoObj.setErrorCode(0);
-			infoObj.setDigestMessage("passwordNotMatch");
-			infoObj.setOperateSuccess(true);
-
-			Client.writeToClient(response.getWriter(), infoObj);
+		if (!(clientUser.getUserPassword().equals(userDB.getUserPassword()))) {//密码不匹配
+			handlePasswordNotMatch(response);
 			return;
 		}
+		handleLoginSuccess(response);
+	}
 
-		jsonObject.put("status", login_status_success);
+	private void handleAdmin(UserDo clientUer, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		AdminDo adminDo = new AdminDo();
+		adminDo.setName(clientUer.getUserName());
+		adminDo.setPassword(clientUer.getUserPassword());
+		ServiceResult<AdminDo> daoResult = null;
 
+		try {
+			daoResult = checkDbOk(adminDo, request, response);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (daoResult == null) return;
+
+		AdminDo adminDoDb = daoResult.getData();
+		boolean notFound = adminDoDb == null;
+		if(notFound){
+			handleNotFond(response);
+			return;
+		}
+		if(!adminDo.getPassword().equals(adminDoDb.getPassword())){
+			handlePasswordNotMatch(response);
+		}
+		handleLoginSuccess(response);
+	}
+
+	private void handleNotFond(HttpServletResponse response) throws IOException {
+		JSONObject jsonObject = new JSONObject();
+		ClientInfoObj<JSONObject> infoObj = new ClientInfoObj<JSONObject>();
+		jsonObject.put("status", LOGIN_STATUS_FAILED);
+		jsonObject.put("message", "userNotExist");
+
+		infoObj.setData(jsonObject);
+		infoObj.setErrorCode(0);
+		infoObj.setDigestMessage("userNotExist");
+		infoObj.setOperateSuccess(true);
+		Client.writeToClient(response.getWriter(), infoObj);
+	}
+
+	private void handlePasswordNotMatch(HttpServletResponse response) throws IOException{
+		JSONObject jsonObject = new JSONObject();
+		ClientInfoObj<JSONObject> infoObj = new ClientInfoObj<JSONObject>();
+
+		jsonObject.put("status", LOGIN_STATUS_FAILED);
+		jsonObject.put("message", "passwordNotMatch");
+		infoObj.setData(jsonObject);
+		infoObj.setErrorCode(0);
+		infoObj.setDigestMessage("passwordNotMatch");
+		infoObj.setOperateSuccess(true);
+
+		Client.writeToClient(response.getWriter(), infoObj);
+	}
+
+	private void handleLoginSuccess(HttpServletResponse response) throws IOException{
+		JSONObject jsonObject = new JSONObject();
+		ClientInfoObj<JSONObject> infoObj = new ClientInfoObj<JSONObject>();
+		jsonObject.put("status", LOGIN_STATUS_SUCCESS);
 		infoObj.setData(jsonObject);
 		infoObj.setDigestMessage("loginSuccess");
 		infoObj.setOperateSuccess(true);
 		infoObj.setErrorCode(0);
 		Client.writeToClient(response.getWriter(), infoObj);
-		System.out.println("login request success !");
 	}
 
 	@RequestMapping(value = "/register")
 	public void register (HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		JSONObject jsonObject;
-		UserDO clientUser = getInfo(request);
+		UserDo clientUser = getInfo(request);
 		if (clientUser == null) return;
 
 		checkFormat(clientUser, response);
 		ClientInfoObj<JSONObject> infoObj = new ClientInfoObj<JSONObject>();
-		ServiceResult<UserDO> result = checkDbOk(clientUser, request, response);
+		ServiceResult<UserDo> result = checkDbOk(clientUser, request, response);
 
 		if (result == null) return;
 
 		jsonObject = new JSONObject();
-		UserDO userDB = result.getData();
+		UserDo userDB = result.getData();
 		boolean exist = (userDB != null);
 		if (exist) {
-			jsonObject.put("status", login_status_failed);
+			jsonObject.put("status", LOGIN_STATUS_FAILED);
 			jsonObject.put("message", "userIsExist");
 
 			infoObj.setData(jsonObject);
@@ -139,10 +185,10 @@ public class LoginController {
 	 * @return 封装后的实体对象
 	 * @throws IOException
 	 */
-	private UserDO getInfo (HttpServletRequest request) throws IOException {
+	private UserDo getInfo (HttpServletRequest request) throws IOException {
 
-		UserDO user;
-		userService = (UserService) context.getBean("userService");
+		UserDo user;
+
 		String clientMessage = Client.readFromClient(request.getReader());
 
 		if (clientMessage == null) {
@@ -152,11 +198,15 @@ public class LoginController {
 
 		String tmpName = null;
 		String tmpPassword = null;
+		int permissionLevel = 1;
 		if (object.has("userName")) {
 			tmpName = object.getString("userName");
 		}
 		if (object.has("userPassword")) {
 			tmpPassword = object.getString("userPassword");
+		}
+		if(object.has("permissionLevel")){
+			permissionLevel = object.getInt("permissionLevel");
 		}
 		if (tmpName == null || tmpPassword == null) {
 			return null;
@@ -167,9 +217,13 @@ public class LoginController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		user = new UserDO();
+		user = new UserDo();
 		user.setUserName(name);
+		if(tmpPassword.length() > PASSWORD_MAX_LENGTH){
+			tmpPassword = tmpPassword.substring(0, PASSWORD_MAX_LENGTH);
+		}
 		user.setUserPassword(tmpPassword);
+		user.setPermissionLevel(permissionLevel);
 		return user;
 	}
 
@@ -181,7 +235,7 @@ public class LoginController {
 	 * @param response   回应客户端
 	 * @throws IOException
 	 */
-	private void checkFormat (UserDO clientUser, HttpServletResponse response) throws IOException {
+	private void checkFormat (UserDo clientUser, HttpServletResponse response) throws IOException {
 
 		ClientInfoObj<JSONObject> outInfo = new ClientInfoObj<JSONObject>();
 		if (clientUser == null) {
@@ -204,25 +258,41 @@ public class LoginController {
 	 * @return 数据库操作返回值
 	 * @throws IOException
 	 */
-	private ServiceResult<UserDO> checkDbOk (UserDO clientUser, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private ServiceResult<UserDo> checkDbOk (UserDo clientUser, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		ClientInfoObj<JSONObject> outInfo = new ClientInfoObj<JSONObject>();
 		HashMap<String, String> dbMapParam = new HashMap<String, String>();
 		dbMapParam.put("userName", clientUser.getUserName());
-		ServiceResult<UserDO> result = userService.queryUserInfo(dbMapParam);
+		ServiceResult<UserDo> result = userService.queryUserInfo(dbMapParam);
 
 		if (!result.isSuccess()) {
-			Logger logger = LoggerFactory.getLogger(LoginController.class);
-			logger.error("数据库操作失败", new Object[]{request, result});
-
-			//response.sendError(404 + 1);
-			outInfo.setDigestMessage("databaseError");
-			outInfo.setErrorCode(2);
-			outInfo.setOperateSuccess(false);
-			outInfo.setData(null);
-			Client.writeToClient(response.getWriter(), outInfo);
+			outToClient(result, request, response);
 			return null;
 		}
 		return result;
 	}
+	private ServiceResult<AdminDo> checkDbOk(AdminDo clintAdmin, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		ServiceResult<AdminDo> result = adminService.queryUser(clintAdmin);
+
+		if (!result.isSuccess()) {
+			outToClient(result, request, response);
+			return null;
+		}
+		return result;
+	}
+	private void outToClient(ServiceResult result, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		ClientInfoObj<JSONObject> outInfo = new ClientInfoObj<JSONObject>();
+
+		Logger logger = LoggerFactory.getLogger(LoginController.class);
+		logger.error("数据库操作失败", new Object[]{request, result});
+
+		//response.sendError(404 + 1);
+		outInfo.setDigestMessage("databaseError");
+		outInfo.setErrorCode(2);
+		outInfo.setOperateSuccess(false);
+		outInfo.setData(null);
+		Client.writeToClient(response.getWriter(), outInfo);
+	}
+
 }

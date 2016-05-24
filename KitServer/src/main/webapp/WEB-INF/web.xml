@@ -26,10 +26,25 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<!-- web权限配置 -->
+	<!--<filter>-->
+	<!--<filter-name>springSecurityFilterChain</filter-name>-->
+	<!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+	<!--</filter>-->
+	<!--<filter-mapping>-->
+	<!--<filter-name>springSecurityFilterChain</filter-name>-->
+	<!--<url-pattern>/*</url-pattern>-->
+	<!--</filter-mapping>-->
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+
 	<!-- 日志记录 -->
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
-		<param-value>/WEB-INF/log4j.properties</param-value>
+		<param-value>classpath:log4j.properties</param-value>
 	</context-param>
 
 	<!-- 每隔多少毫秒扫描一下配置文件的变化（此参数可选配） -->
@@ -45,6 +60,10 @@
 	<listener>
 		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
 	</listener>
+	<!--<listener>-->
+	<!--<listener-class>org.springframework.web.util.Log4jWebConfigurer</listener-class>-->
+	<!--</listener>-->
+
 	<listener>
 		<listener-class>com.tanl.kitserver.conf.TomcatListener</listener-class>
 	</listener>
@@ -56,26 +75,40 @@
 			<param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-
+	<!--SESSION LIFE-->
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
 
 	<welcome-file-list>
 		<welcome-file>/WEB-INF/pages/index.jsp</welcome-file>
 	</welcome-file-list>
 	<!-- 错误跳转页面 -->
 	<error-page>
-		<!-- 路径不正确 -->
-		<error-code>404</error-code>
-		<location>/WEB-INF/errorpage/404.jsp</location>
+		<!-- 权限 -->
+		<error-code>401</error-code>
+		<location>/WEB-INF/errorpage/401.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- 权限 -->
+		<error-code>403</error-code>
+		<location>/WEB-INF/errorpage/403.jsp</location>
 	</error-page>
 	<error-page>
 		<!-- 没有访问权限，访问被禁止 -->
 		<error-code>405</error-code>
 		<location>/WEB-INF/errorpage/405.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- 路径不正确 -->
+		<error-code>404</error-code>
+		<location>/WEB-INF/errorpage/404.jsp</location>
 	</error-page>
 	<error-page>
 		<!-- 内部错误 -->

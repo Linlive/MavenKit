@@ -1,6 +1,6 @@
 package test;
 
-import com.tanl.kitserver.model.bean.UserDO;
+import com.tanl.kitserver.model.bean.UserDo;
 import com.tanl.kitserver.service.UserService;
 import com.tanl.kitserver.util.ServiceResult;
 import com.tanl.kitserver.util.common.ClientInfoObj;
@@ -31,24 +31,30 @@ public class UserTest {
 	@Test
 	public void addUser(){
 
-		UserDO user = new UserDO();
+		UserDo user = new UserDo();
 
 		user.setUserName("ccaaaa");
 		user.setUserPassword("mima");
 		user.setUserAge(22);
 		user.setUserId("2012051045");
-		user.setUserPhoneNumber("110");
-		user.setUserEmailAddress("email");
+		user.setUserPhone("110");
+		user.setUserEmail("email");
 		System.out.println(user.getUserId());
 
 		ServiceResult serviceResult = userService.insertUser(user);
+
+		Admin admin = new Admin();
+		admin.setName("admin");
+		admin.setPassword("");
+
+
 	}
 	@Test
 	public void findUser(){
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("userName", "cc");
-		ServiceResult<UserDO> dao = userService.queryUserInfo(map);
+		ServiceResult<UserDo> dao = userService.queryUserInfo(map);
 		Logger logger = LoggerFactory.getLogger(UserTest.class);
 //		System.out.println(result.getData() + "========" + result.isSuccess());
 
@@ -57,6 +63,30 @@ public class UserTest {
 	}
 
 
+	private class Admin {
+		String name;
+		String password;
+
+		public String getName () {
+
+			return name;
+		}
+
+		public void setName (String name) {
+
+			this.name = name;
+		}
+
+		public String getPassword () {
+
+			return password;
+		}
+
+		public void setPassword (String password) {
+
+			this.password = password;
+		}
+	}
 	@Test
 	public void gsonTest(){
 
