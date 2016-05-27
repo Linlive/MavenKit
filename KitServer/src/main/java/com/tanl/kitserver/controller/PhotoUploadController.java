@@ -3,6 +3,7 @@ package com.tanl.kitserver.controller;
 import com.tanl.kitserver.model.bean.GoodsDo;
 import com.tanl.kitserver.service.GoodsImgsService;
 import com.tanl.kitserver.service.GoodsService;
+import com.tanl.kitserver.util.ServerRootPath;
 import com.tanl.kitserver.util.ServiceResult;
 import com.tanl.kitserver.util.common.GenerateGoodsId;
 import org.apache.commons.fileupload.FileItem;
@@ -10,10 +11,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.Log4JLogger;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -47,7 +44,6 @@ public class PhotoUploadController {
 	private ServiceResult<Integer> goodsInsertResult;
 	private ServiceResult goodsImageInsertResult;
 
-
 	/**
 	 * 用户上传的文件均在upload下
 	 *
@@ -62,7 +58,9 @@ public class PhotoUploadController {
 
 		//获得磁盘文件条目工厂。
 		DiskFileItemFactory factory = new DiskFileItemFactory();
-		rootPath = request.getSession().getServletContext().getRealPath("/");
+
+		rootPath = ServerRootPath.getRootPath(request);
+
 		createRootDirs(rootPath);
 		//避免文件过大在内存中
 		factory.setRepository(new File(rootPath, "tmp/"));
@@ -98,6 +96,22 @@ public class PhotoUploadController {
 		}
 	}
 
+	@RequestMapping(value = "/getPhoto/**")
+	public void getFile(HttpServletRequest request, HttpServletResponse response) throws IOException{
+
+		if(null == rootPath){
+			rootPath = ServerRootPath.getRootPath(request);
+		}
+		File f = new File(rootPath, "/images/");
+		if(!f.exists() && !f.mkdirs()){
+			Log4JLogger logger = new Log4JLogger("getPhotoErrorLog");
+			logger.error("could not create dir");
+		}
+	}
+
+	/**
+	 * 插入数据库
+	 */
 	private void insertGoodsToDB(){
 
 		GoodsDo goodsDo = new GoodsDo();
@@ -105,12 +119,13 @@ public class PhotoUploadController {
 		goodsDo.setGoodsName("名称-");
 
 		setBasicInfo(goodsDo);
-
+//      设置商品类别等信息的另一种方式
 //		goodsDo.setGoodsBrandValue(photoInfoMap.get("brand"));
 //		goodsDo.setGoodsTypeValue(photoInfoMap.get("type"));
 //		goodsDo.setGoodsSizeValue(photoInfoMap.get("size"));
 //		goodsDo.setGoodsColorValue(photoInfoMap.get("color"));
 
+		goodsDo.setGoodsExtras(photoInfoMap.get("extraInfo"));
 		goodsDo.setGoodsPlace(photoInfoMap.get("place"));
 		goodsDo.setGoodsPrice(Float.valueOf(photoInfoMap.get("price")));
 		goodsDo.setGoodsRepertory(Integer.valueOf(photoInfoMap.get("repertory")));
@@ -119,6 +134,12 @@ public class PhotoUploadController {
 		goodsService.addGoods(goodsDo);
 	}
 
+	/**
+	 * 设置商品的基本信息。
+	 * 可以直接设置为string，为了系统的后续类型的增加或
+	 * 更改，以免进行不必要的更新操作。
+	 * @param goodsDo 商品实例
+	 */
 	private void setBasicInfo(GoodsDo goodsDo){
 		ServiceResult<Integer> brand;
 		brand = goodsService.findBrand(photoInfoMap.get("brand"));
@@ -137,22 +158,14 @@ public class PhotoUploadController {
 		if(brand.isSuccess()){
 			goodsDo.setGoodsColor(brand.getData());
 		}
-
 	}
 
-	ApplicationContext context;
-
-	@Before
-	public void before() {
-
-		context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		goodsService = (GoodsService) context.getBean("goodsService");
-	}
-	@Test
-	public void test(){
-		goodsService.findSize("L");
-	}
-
+	/**
+	 * 处理post上传的文字表单数据
+	 *
+	 * @param request
+	 * @param item
+	 */
 	private void handleTextInfo(HttpServletRequest request, FileItem item) {
 		String name = item.getFieldName();
 		String value = item.getString();
@@ -204,8 +217,8 @@ public class PhotoUploadController {
 
 		OutputStream out = null;
 		InputStream in = null;
-
-		File f = new File(createDir(rootPath + "/img/" + request.getAttribute("userId") + "/" + goodsId + "/"), goodsId + filename);
+		String parentPath = createDir(rootPath + "/img/" + request.getAttribute("userId") + "/" + goodsId + "/");
+		File f = new File(parentPath, filename + goodsId);
 		try {
 
 			out = new FileOutputStream(f);
@@ -228,7 +241,9 @@ public class PhotoUploadController {
 				e.printStackTrace();
 			}
 		}
-		return f.getAbsolutePath();
+		int startIndex = f.getAbsolutePath().lastIndexOf("img");
+
+		return f.getAbsolutePath().substring(startIndex - 1);
 	}
 
 	/**
@@ -247,12 +262,15 @@ public class PhotoUploadController {
 		Log log = new Log4JLogger();
 		if(!tmpDir.exists() && !tmpDir.mkdirs()){
 			log.error("can not create dir :" + tmpDir);
+			createDir(rootPath + "/tmp/");
 		}
 		if(!imgDir.exists() && !imgDir.mkdirs()){
 			log.error("can not create dir :" + imgDir);
+			createDir(rootPath + "/img/");
 		}
 		if(!photoDir.exists() && !photoDir.mkdirs()){
 			log.error("can not create dir :" + photoDir);
+			createDir(rootPath + "/upload/");
 		}
 	}
 	private String createDir(String dirPath){

@@ -7,6 +7,7 @@ import com.tanl.kitserver.util.ServiceResult;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * 商品中间服务层
@@ -28,6 +29,20 @@ public class GoodsServiceImpl implements GoodsService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			result.setSuccess(false);
+		}
+		return result;
+	}
+
+	public ServiceResult<List<GoodsDo>> queryFirstGoods () {
+
+		ServiceResult<List<GoodsDo>> result = new ServiceResult<List<GoodsDo>>();
+		List<GoodsDo> goodsList;
+		try {
+			goodsList = goodsDao.findGoodsFirst();
+			result.setSuccess(true);
+			result.setData(goodsList);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return result;
 	}

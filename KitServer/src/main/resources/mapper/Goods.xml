@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!--suppress ALL -->
 <sqlMap namespace="Goods">
 	<typeAlias alias="Goods" type="com.tanl.kitserver.model.bean.GoodsDo"/>
+	<typeAlias alias="User" type="com.tanl.kitserver.model.bean.UserDo"/>
+
 	<insert id="insertGoods" parameterClass="Goods">
-		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice)
-		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#);
+		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice, goodsExtras)
+		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#, #goodsExtras#);
 	</insert>
 
 	<insert id="insertGoods1" parameterClass="Goods">
@@ -13,25 +16,68 @@
 		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#);
 	</insert>
 
+	<!--商品的基本类型，用int表示，便于扩展-->
 	<select id="queryBrand" parameterClass="java.lang.String" resultClass="Integer">
-		SELECT brandId FROM tb_goods_brand WHERE brandName LIKE '$brandValue$'
+		SELECT brandId
+		FROM tb_goods_brand
+		WHERE brandName LIKE '$brandValue$'
 	</select>
+	<select id="queryBrandValue" parameterClass="java.lang.Integer" resultClass="java.lang.String">
+		SELECT brandName
+		FROM tb_goods_brand
+		WHERE brandId = #brandId#
+	</select>
+
 	<select id="queryType" parameterClass="java.lang.String" resultClass="Integer">
-	SELECT typeId FROM tb_goods_type WHERE typeName LIKE '$typeValue$'
-		</select>
+		SELECT typeId
+		FROM tb_goods_type
+		WHERE typeName LIKE '$typeValue$'
+	</select>
+	<select id="queryTypeValue" resultClass="String" parameterClass="Integer">
+		SELECT typeName
+		FROM tb_goods_type
+		WHERE typeId = #typeId#
+	</select>
+
 	<select id="querySize" parameterClass="java.lang.String" resultClass="Integer">
-		SELECT sizeId FROM tb_goods_size WHERE sizeValue LIKE #sizeValue#
+		SELECT sizeId
+		FROM tb_goods_size
+		WHERE sizeValue LIKE #sizeValue#
 	</select>
+	<select id="querySizeValue" parameterClass="Integer" resultClass="String">
+		SELECT sizeValue
+		FROM tb_goods_size
+		WHERE sizeId LIKE #sizeId#
+	</select>
+
 	<select id="queryColor" parameterClass="java.lang.String" resultClass="Integer">
-		SELECT colorId FROM tb_goods_color WHERE colorValue LIKE #colorValue#
+		SELECT colorId
+		FROM tb_goods_color
+		WHERE colorValue LIKE #colorValue#
+	</select>
+	<select id="queryColorValue" parameterClass="Integer" resultClass="String">
+		SELECT colorValue
+		FROM tb_goods_color
+		WHERE colorId LIKE #colorId#
 	</select>
 
 
-	<select id="queryGoodsById">
-		SELECT * FROM tb_goods WHERE goodsId = #goodsId#
+	<!--商品的集中查询-->
+	<select id="queryGoodsById" resultClass="Goods">
+		SELECT *
+		FROM tb_goods
+		WHERE goodsId = #goodsId#
 	</select>
-	<select id="queryGoodsByShopKeeper" parameterClass="Goods">
-		SELECT * FROM tb_goods WHERE shopKeeperId = #shopKeeperId#
+	<select id="queryGoodsByShopKeeper" parameterClass="User" resultClass="Goods">
+		SELECT *
+		FROM tb_goods
+		LIMIT"" WHERE shopKeeperId = #userId# ORDER BY goodsPrice LIMIT 20
 	</select>
+	<select id="queryGoodsDefault" resultClass="Goods">
+		SELECT *
+		FROM tb_goods
+		LIMIT 2;
+	</select>
+
 
 </sqlMap>

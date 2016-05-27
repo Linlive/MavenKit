@@ -6,6 +6,7 @@ import com.tanl.kitserver.util.ServiceResult;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,5 +42,10 @@ public class GoodsImgsServiceImpl implements GoodsImgsService {
 		}
 
 		return dbResult;
+	}
+
+	public ServiceResult<List<HashMap<String, String>>> queryAllGoods () {
+
+		return null;
 	}
 }

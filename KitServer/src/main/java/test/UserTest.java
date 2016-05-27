@@ -31,6 +31,7 @@ public class UserTest {
 	@Test
 	public void addUser(){
 
+
 		UserDo user = new UserDo();
 
 		user.setUserName("ccaaaa");

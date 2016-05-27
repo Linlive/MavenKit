@@ -22,7 +22,6 @@ public class AdminServiceImpl implements AdminService {
 		AdminDo retAdminDo;
 		ServiceResult<AdminDo> result = new ServiceResult<AdminDo>();
 		try {
-
 			retAdminDo = adminDao.queryAdminInfo(adminDo);
 			result.setSuccess(true);
 			result.setData(retAdminDo);

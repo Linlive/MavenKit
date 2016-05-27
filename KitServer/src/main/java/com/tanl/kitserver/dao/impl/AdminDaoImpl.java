@@ -21,6 +21,6 @@ public class AdminDaoImpl implements AdminDao {
 
 	public AdminDo queryAdminInfo (AdminDo adminDo) throws SQLException {
 
-		return (AdminDo)sqlMapClient.queryForObject("queryAdmin");
+		return (AdminDo)sqlMapClient.queryForObject("queryAdmin", adminDo);
 	}
 }

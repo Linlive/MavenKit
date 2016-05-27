@@ -89,7 +89,7 @@ public class LoginController {
 
 		AdminDo adminDoDb = daoResult.getData();
 		boolean notFound = adminDoDb == null;
-		if(notFound){
+		if(notFound) {
 			handleNotFond(response);
 			return;
 		}
