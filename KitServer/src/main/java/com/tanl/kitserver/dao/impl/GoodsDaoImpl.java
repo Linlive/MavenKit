@@ -7,6 +7,8 @@ import com.tanl.kitserver.model.bean.UserDo;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,13 +28,15 @@ public class GoodsDaoImpl implements GoodsDao {
 		return 0;
 	}
 
-	public GoodsDo findSingleGoods() throws SQLException {
+	public GoodsDo findSingleGoods () throws SQLException {
+
 		Object obj = sqlMapClient.queryForObject("");
-		return (GoodsDo)(obj);
+		return (GoodsDo) (obj);
 	}
 
-	public List<GoodsDo> findGoodsByShopKeeperId(UserDo userDo) throws SQLException {
-		if(userDo == null){
+	public List<GoodsDo> findGoodsByShopKeeperId (UserDo userDo) throws SQLException {
+
+		if (userDo == null) {
 			return findGoodsFirst();
 		}
 		List goodsDos = sqlMapClient.queryForList("queryGoodsByShopKeeper", userDo);
@@ -44,16 +48,20 @@ public class GoodsDaoImpl implements GoodsDao {
 		List goodsDos = sqlMapClient.queryForList("queryGoodsDefault");
 		return listToListBean(goodsDos);
 	}
-	private List<GoodsDo> listToListBean(List goods) throws SQLException {
+
+	private List<GoodsDo> listToListBean (List goods) throws SQLException {
+
 		List<GoodsDo> retGoods = new LinkedList<GoodsDo>();
 		GoodsDo tmp;
 		for (Object goodsDo : goods) {
 			tmp = (GoodsDo) goodsDo;
+			//设置value
 			tmp.setGoodsBrandValue(findBrandValue(tmp.getGoodsBrand()));
 			tmp.setGoodsTypeValue(findTypeValue(tmp.getGoodsType()));
 			tmp.setGoodsSizeValue(findSizeValue(tmp.getGoodsSize()));
 			tmp.setGoodsColorValue(findColorValue(tmp.getGoodsColor()));
-
+			//设置imgUrl
+			tmp.setImgUrlList(findGoodsUrl(tmp.getGoodsId()));
 			retGoods.add(tmp);
 		}
 		return retGoods;
@@ -61,9 +69,8 @@ public class GoodsDaoImpl implements GoodsDao {
 
 	/**
 	 * 根据值查询type
-	 *
+	 * <p>
 	 * 或根据type查找值
-	 *
 	 */
 	public Integer findBrand (String brandValue) throws SQLException {
 
@@ -71,9 +78,14 @@ public class GoodsDaoImpl implements GoodsDao {
 		return (Integer) sqlMapClient.queryForObject("queryBrand", query);
 	}
 
+	public int insertBrand (String brandValue) throws SQLException {
+
+		return (Integer) sqlMapClient.insert("insertBrand", brandValue);
+	}
+
 	public String findBrandValue (Integer brandId) throws SQLException {
 
-		return (String)sqlMapClient.queryForObject("Goods.queryBrandValue", brandId);
+		return (String) sqlMapClient.queryForObject("queryBrandValue", brandId);
 	}
 
 	public Integer findType (String typeValue) throws SQLException {
@@ -82,9 +94,14 @@ public class GoodsDaoImpl implements GoodsDao {
 		return (Integer) sqlMapClient.queryForObject("queryType", query);
 	}
 
+	public int insertType (String typeValue) throws SQLException {
+
+		return (Integer) sqlMapClient.insert("insertType", typeValue);
+	}
+
 	public String findTypeValue (Integer typeId) throws SQLException {
 
-		return (String)sqlMapClient.queryForObject("Goods.queryTypeValue", typeId);
+		return (String) sqlMapClient.queryForObject("queryTypeValue", typeId);
 	}
 
 	public Integer findSize (String sizeValue) throws SQLException {
@@ -92,9 +109,14 @@ public class GoodsDaoImpl implements GoodsDao {
 		return (Integer) sqlMapClient.queryForObject("querySize", sizeValue);
 	}
 
+	public int insertSize (String sizeValue) throws SQLException {
+
+		return (Integer) sqlMapClient.insert("insertSize", sizeValue);
+	}
+
 	public String findSizeValue (Integer sizeId) throws SQLException {
 
-		return (String)sqlMapClient.queryForObject("Goods.querySizeValue", sizeId);
+		return (String) sqlMapClient.queryForObject("querySizeValue", sizeId);
 	}
 
 	public Integer findColor (String colorValue) throws SQLException {
@@ -102,8 +124,28 @@ public class GoodsDaoImpl implements GoodsDao {
 		return (Integer) sqlMapClient.queryForObject("queryColor", colorValue);
 	}
 
+	public int insertColor (String colorValue) throws SQLException {
+
+		return (Integer) sqlMapClient.insert("insertColor", colorValue);
+	}
+
 	public String findColorValue (Integer colorId) throws SQLException {
 
-		return (String)sqlMapClient.queryForObject("Goods.queryColorValue", colorId);
+		return (String) sqlMapClient.queryForObject("queryColorValue", colorId);
+	}
+
+	public List<String> findGoodsUrl (String goodsId) throws SQLException {
+
+		List<String> imgs = new ArrayList<String>();
+		List result = sqlMapClient.queryForList("queryImgs", goodsId);
+		Iterator iterator = result.iterator();
+		while (iterator.hasNext()) {
+			String tmp = (String) iterator.next();
+			if (tmp.contains("\\")) {
+				tmp = tmp.replaceAll("\\\\", "/");
+			}
+			imgs.add(tmp);
+		}
+		return imgs;
 	}
 }

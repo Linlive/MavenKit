@@ -53,6 +53,9 @@ public class GoodsServiceImpl implements GoodsService {
 		Integer id;
 		try {
 			id = goodsDao.findBrand(brandValue);
+			if (null == id){
+				id = goodsDao.insertBrand(brandValue);
+			}
 			result.setSuccess(true);
 			result.setData(id);
 		} catch (SQLException e) {
@@ -67,6 +70,9 @@ public class GoodsServiceImpl implements GoodsService {
 		Integer id;
 		try {
 			id = goodsDao.findType(typeValue);
+			if (null == id){
+				id = goodsDao.insertType(typeValue);
+			}
 			result.setSuccess(true);
 			result.setData(id);
 		} catch (SQLException e) {
@@ -81,6 +87,9 @@ public class GoodsServiceImpl implements GoodsService {
 		Integer id;
 		try {
 			id = goodsDao.findSize(sizeValue);
+			if (null == id){
+				id = goodsDao.insertSize(sizeValue);
+			}
 			result.setSuccess(true);
 			result.setData(id);
 		} catch (SQLException e) {
@@ -95,6 +104,9 @@ public class GoodsServiceImpl implements GoodsService {
 		Integer id;
 		try {
 			id = goodsDao.findColor(colorValue);
+			if (null == id){
+				id = goodsDao.insertColor(colorValue);
+			}
 			result.setSuccess(true);
 			result.setData(id);
 		} catch (SQLException e) {

@@ -1,5 +1,7 @@
 package com.tanl.kitserver.model.bean;
 
+import java.util.List;
+
 /**
  * 商品 对象，属性包含：
  * 品牌，类型，尺寸，颜色，适合于什么地方，价格（售价）
@@ -27,6 +29,7 @@ public class GoodsDo {
 	private String goodsSizeValue;
 	private String goodsColorValue;
 
+	private List<String> imgUrlList;
 	// 额外信息
 	private String goodsExtras;
 
@@ -182,5 +185,22 @@ public class GoodsDo {
 	public void setGoodsExtras (String goodsExtras) {
 
 		this.goodsExtras = goodsExtras;
+	}
+
+	public List<String> getImgUrlList () {
+
+		return imgUrlList;
+	}
+
+	public void setImgUrlList (List<String> imgUrlList) {
+
+		this.imgUrlList = imgUrlList;
+	}
+
+	@Override
+	public String toString () {
+
+		return "GoodsDo:" + goodsId + goodsName + goodsBrandValue + goodsTypeValue + goodsSizeValue
+				+ goodsColorValue + shopKeeperId;
 	}
 }

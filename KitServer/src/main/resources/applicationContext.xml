@@ -49,6 +49,8 @@
 	<bean id="goodsDao" class="com.tanl.kitserver.dao.impl.GoodsDaoImpl"/>
 	<bean id="goodsImgPathDao" class="com.tanl.kitserver.dao.impl.GoodsImgPathDaoImpl"/>
 
+	<bean id="shoppingCartDao" class="com.tanl.kitserver.dao.impl.ShoppingCartDaoImpl"/>
+
 
 
 	<!--服务中间层-->
@@ -56,6 +58,8 @@
 	<bean id="adminService" class="com.tanl.kitserver.service.impl.AdminServiceImpl"/>
 	<bean id="goodsService" class="com.tanl.kitserver.service.impl.GoodsServiceImpl"/>
 	<bean id="goodsImgsService" class="com.tanl.kitserver.service.impl.GoodsImgsServiceImpl"/>
+
+	<bean id="shoppingCartService" class="com.tanl.kitserver.service.impl.ShoppingCartServiceImpl"/>
 
 
 

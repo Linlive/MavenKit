@@ -51,7 +51,7 @@ public class PhotoUploadController {
 	 * @param response response
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/uploadDetail")
+	@RequestMapping(value = "/uploadGoods")
 	public void uploadHandle (HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		request.setCharacterEncoding("UTF-8");
@@ -116,7 +116,7 @@ public class PhotoUploadController {
 
 		GoodsDo goodsDo = new GoodsDo();
 		goodsDo.setGoodsId(goodsId);
-		goodsDo.setGoodsName("名称-");
+		goodsDo.setGoodsName(photoInfoMap.get("name"));
 
 		setBasicInfo(goodsDo);
 //      设置商品类别等信息的另一种方式
@@ -218,7 +218,8 @@ public class PhotoUploadController {
 		OutputStream out = null;
 		InputStream in = null;
 		String parentPath = createDir(rootPath + "/img/" + request.getAttribute("userId") + "/" + goodsId + "/");
-		File f = new File(parentPath, filename + goodsId);
+		String tmp = filename.substring(0, filename.lastIndexOf('.'));
+		File f = new File(parentPath, tmp + goodsId + ".jpg");
 		try {
 
 			out = new FileOutputStream(f);

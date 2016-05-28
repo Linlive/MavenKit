@@ -17,6 +17,8 @@ public interface GoodsDao {
 	List<GoodsDo> findGoodsByShopKeeperId(UserDo userDo) throws SQLException;
 	List<GoodsDo> findGoodsFirst() throws SQLException;
 
+	List<String> findGoodsUrl(String goodsId) throws SQLException;
+
 	//type
 	Integer findBrand(String brandValue) throws SQLException;
 	Integer findType(String typeValue) throws SQLException;
@@ -27,4 +29,10 @@ public interface GoodsDao {
 	String findTypeValue(Integer typeId) throws SQLException;
 	String findSizeValue(Integer sizeId) throws SQLException;
 	String findColorValue(Integer colorId) throws SQLException;
+
+	//支持自定义值
+	int insertBrand (String brandValue) throws SQLException;
+	int insertType (String typeValue) throws SQLException;
+	int insertSize (String sizeValue) throws SQLException;
+	int insertColor (String colorValue) throws SQLException;
 }

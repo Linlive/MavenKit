@@ -1,6 +1,7 @@
 package com.tanl.kitserver.util.common;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -49,6 +50,10 @@ public class Client {
 	 * @throws IOException
 	 */
 	public static boolean writeToClient (Writer writer, JSONObject object) throws IOException {
+
+		return writeToClient(writer, object.toString());
+	}
+	public static boolean writeToClient (Writer writer, JsonObject object) throws IOException {
 
 		return writeToClient(writer, object.toString());
 	}

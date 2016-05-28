@@ -8,12 +8,12 @@
 
 	<insert id="insertGoods" parameterClass="Goods">
 		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice, goodsExtras)
-		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#, #goodsExtras#);
+		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#, #goodsExtras#)
 	</insert>
 
 	<insert id="insertGoods1" parameterClass="Goods">
 		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice)
-		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#);
+		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#)
 	</insert>
 
 	<!--商品的基本类型，用int表示，便于扩展-->
@@ -22,6 +22,10 @@
 		FROM tb_goods_brand
 		WHERE brandName LIKE '$brandValue$'
 	</select>
+	<insert id="insertBrand" parameterClass="String">
+		INSERT INTO tb_goods_brand(brandName) VALUES (#brandValue#)
+		<selectKey resultClass="int">SELECT @@IDENTITY</selectKey>
+	</insert>
 	<select id="queryBrandValue" parameterClass="java.lang.Integer" resultClass="java.lang.String">
 		SELECT brandName
 		FROM tb_goods_brand
@@ -33,6 +37,10 @@
 		FROM tb_goods_type
 		WHERE typeName LIKE '$typeValue$'
 	</select>
+	<insert id="insertType" parameterClass="String">
+		INSERT INTO tb_goods_type(typeName) VALUES (#typeValue#)
+		<selectKey resultClass="int">SELECT @@IDENTITY</selectKey>
+	</insert>
 	<select id="queryTypeValue" resultClass="String" parameterClass="Integer">
 		SELECT typeName
 		FROM tb_goods_type
@@ -44,6 +52,11 @@
 		FROM tb_goods_size
 		WHERE sizeValue LIKE #sizeValue#
 	</select>
+	<insert id="insertSize" parameterClass="String">
+		INSERT INTO tb_goods_size(sizeValue) VALUES (#sizeValue#)
+		<selectKey resultClass="int">SELECT @@IDENTITY </selectKey>
+
+	</insert>
 	<select id="querySizeValue" parameterClass="Integer" resultClass="String">
 		SELECT sizeValue
 		FROM tb_goods_size
@@ -55,10 +68,18 @@
 		FROM tb_goods_color
 		WHERE colorValue LIKE #colorValue#
 	</select>
+	<insert id="insertColor" parameterClass="String">
+		INSERT INTO tb_goods_color(colorValue) VALUES (#colorValue#)
+		<selectKey resultClass="int">SELECT @@IDENTITY</selectKey>
+	</insert>
 	<select id="queryColorValue" parameterClass="Integer" resultClass="String">
 		SELECT colorValue
 		FROM tb_goods_color
 		WHERE colorId LIKE #colorId#
+	</select>
+
+	<select id="queryImgs" resultClass="String" parameterClass="String">
+		SELECT tb_goods_img.goodsImgRootPath FROM tb_goods_img WHERE goodsId = #goodsId#
 	</select>
 
 

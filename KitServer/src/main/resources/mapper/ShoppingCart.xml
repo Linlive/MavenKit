@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="Cart" type="com.tanl.kitserver.model.bean.ShoppingCartDo"/>
+
+	<insert id="addToCart" parameterClass="Cart">
+		insert into tb_shopping_cart (userId, goodsId, goodsChooseNumber, goodsPrice, goodsSize, goodsColor, goodsType, shopKeeperId)
+		values (#userId#, #goodsId#, #goodsChooseNumber#, #goodsPrice#, #goodsSize#, #goodsColor#, #goodsType#, #shopKeeperId#)
+	</insert>
+	<update id="updateCart" parameterClass="Integer">
+		UPDATE tb_shopping_cart SET goodsChooseNumber = #num#
+	</update>
+
+	<delete id="deleteFromCart" parameterClass="Cart">
+		DELETE FROM tb_shopping_cart WHERE goodsId = #goodsId#
+	</delete>
+
+	<select id="queryChooseNumber" parameterClass="String" resultClass="Integer">
+		SELECT goodsChooseNumber FROM tb_shopping_cart WHERE goodsId = #goodsId#
+	</select>
+	<select id="queryCart" parameterClass="String" resultClass="Cart">
+		SELECT * FROM tb_shopping_cart WHERE userId = #userId#
+	</select>
+
+</sqlMap>
