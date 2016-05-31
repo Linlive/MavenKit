@@ -50,6 +50,7 @@
 	<bean id="goodsImgPathDao" class="com.tanl.kitserver.dao.impl.GoodsImgPathDaoImpl"/>
 
 	<bean id="shoppingCartDao" class="com.tanl.kitserver.dao.impl.ShoppingCartDaoImpl"/>
+	<bean id="indentDao" class="com.tanl.kitserver.dao.impl.IndentDaoImpl"/>
 
 
 
@@ -60,6 +61,7 @@
 	<bean id="goodsImgsService" class="com.tanl.kitserver.service.impl.GoodsImgsServiceImpl"/>
 
 	<bean id="shoppingCartService" class="com.tanl.kitserver.service.impl.ShoppingCartServiceImpl"/>
+	<bean id="indentService" class="com.tanl.kitserver.service.impl.IndentServiceImpl"/>
 
 
 

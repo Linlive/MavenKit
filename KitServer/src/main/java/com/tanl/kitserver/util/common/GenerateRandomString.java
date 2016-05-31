@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by Administrator on 2016/5/24.
  */
-public class GenerateGoodsId {
+public class GenerateRandomString {
 
 	private static final String GOODS_ID_BASE = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-=_";
 	private static final int GOODS_ID_BASE_LENGTH = GOODS_ID_BASE.length();

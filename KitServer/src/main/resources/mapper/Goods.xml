@@ -16,6 +16,11 @@
 		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#)
 	</insert>
 
+
+	<select id="getGoodsName" parameterClass="String" resultClass="String">
+		SELECT goodsName FROM tb_goods WHERE goodsId = #goodsId#
+	</select>
+
 	<!--商品的基本类型，用int表示，便于扩展-->
 	<select id="queryBrand" parameterClass="java.lang.String" resultClass="Integer">
 		SELECT brandId
@@ -81,6 +86,12 @@
 	<select id="queryImgs" resultClass="String" parameterClass="String">
 		SELECT tb_goods_img.goodsImgRootPath FROM tb_goods_img WHERE goodsId = #goodsId#
 	</select>
+	<select id="queryGoodsDesc" parameterClass="String" resultClass="String">
+		SELECT goodsExtras FROM tb_goods WHERE goodsId = #goodsId#
+	</select>
+	<select id="queryGoodsExtra" parameterClass="String" resultClass="String">
+		SELECT goodsExtras FROM tb_goods WHERE goodsId = #goodsId#
+	</select>
 
 
 	<!--商品的集中查询-->
@@ -92,12 +103,12 @@
 	<select id="queryGoodsByShopKeeper" parameterClass="User" resultClass="Goods">
 		SELECT *
 		FROM tb_goods
-		LIMIT"" WHERE shopKeeperId = #userId# ORDER BY goodsPrice LIMIT 20
+		WHERE shopKeeperId = #userId# ORDER BY goodsPrice LIMIT 20
 	</select>
 	<select id="queryGoodsDefault" resultClass="Goods">
 		SELECT *
 		FROM tb_goods
-		LIMIT 2;
+		LIMIT 20;
 	</select>
 
 

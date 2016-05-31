@@ -33,11 +33,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 		return result;
 	}
 
-	public ServiceResult<Boolean> deleteFromShoppingCart (ShoppingCartDo shoppingCartDo) {
+	public ServiceResult<Boolean> deleteFromShoppingCart (String goodsId) {
 
 		ServiceResult<Boolean> result = new ServiceResult<Boolean>();
 		try {
-			boolean success = shoppingCartDao.deleteFromShoppingCart(shoppingCartDo);
+			boolean success = shoppingCartDao.deleteFromShoppingCart(goodsId);
 			result.setSuccess(true);
 			result.setData(success);
 

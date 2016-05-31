@@ -7,7 +7,6 @@ import com.tanl.kitserver.model.bean.ShoppingCartDo;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,8 +18,9 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 	SqlMapClient sqlMapClient;
 
 	public boolean addToShoppingCart (ShoppingCartDo cartDo) throws SQLException {
+
 		Object obj = queryCart(cartDo.getGoodsId());
-		if(null == obj){
+		if (null == obj) {
 			sqlMapClient.insert("addToCart", cartDo);
 		} else {
 			Integer num = (Integer) obj + 1;
@@ -29,25 +29,40 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 		return true;
 	}
 
-	public boolean deleteFromShoppingCart (ShoppingCartDo cartDo) throws SQLException {
+	public boolean deleteFromShoppingCart (String goodsId) throws SQLException {
 
-		sqlMapClient.delete("deleteFromCart", cartDo);
+		sqlMapClient.delete("deleteFromCart", goodsId);
 		return true;
 	}
 
-	public List<ShoppingCartDo> queryShoppingCart (String userId) throws SQLException{
+	public List<ShoppingCartDo> queryShoppingCart (String userId) throws SQLException {
 
 		List<ShoppingCartDo> cartDos = new ArrayList<ShoppingCartDo>();
 
 		List ret = sqlMapClient.queryForList("queryCart", userId);
-		Iterator<ShoppingCartDo> iterator = ret.iterator();
-		while (iterator.hasNext()){
-			cartDos.add(iterator.next());
+
+		for (Object aRet : ret) {
+			ShoppingCartDo cartDo = (ShoppingCartDo) aRet;
+			queryTypeSoOn(cartDo);
+			cartDos.add(cartDo);
 		}
 		return cartDos;
 	}
 
-	private Object queryCart(String goodsId) throws SQLException {
+	private void queryTypeSoOn (ShoppingCartDo cartDo) throws SQLException {
+		Object typeValue = sqlMapClient.queryForObject("queryTypeValue", cartDo.getGoodsType());
+		Object sizeValue = sqlMapClient.queryForObject("querySizeValue", cartDo.getGoodsSize());
+		Object colorValue = sqlMapClient.queryForObject("queryColorValue", cartDo.getGoodsColor());
+		Object extraValue = sqlMapClient.queryForObject("queryExtra", cartDo.getGoodsId());
+
+		cartDo.setGoodsTypeValue((String) typeValue);
+		cartDo.setGoodsSizeValue((String) sizeValue);
+		cartDo.setGoodsColorValue((String) colorValue);
+		cartDo.setGoodsExtra((String) extraValue);
+	}
+
+	private Object queryCart (String goodsId) throws SQLException {
+
 		return sqlMapClient.queryForObject("queryChooseNumber", goodsId);
 	}
 }

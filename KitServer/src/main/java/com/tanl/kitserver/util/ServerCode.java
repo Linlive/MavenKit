@@ -1,6 +1,7 @@
 package com.tanl.kitserver.util;
 
 /**
+ * 服务器返回码
  * Created by Administrator on 2016/5/29.
  */
 public class ServerCode {

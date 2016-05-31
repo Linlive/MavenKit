@@ -40,26 +40,10 @@ public class ShoppingCartController {
 	@RequestMapping(value = "/addToShoppingCart")
 	public void addToShoppingCart (HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		ShoppingCartDo shoppingCartDo = new ShoppingCartDo();
-		BufferedReader bf = new BufferedReader(request.getReader());
-		String client = Client.readFromClient(bf);
-
-		System.out.println(client);
-
-		JsonParser jp = new JsonParser();
-		if (client == null) {
-			return;
-		}
-		JsonElement je = jp.parse(client);
-		if (!je.isJsonObject()) {
-			return;
-		}
-		JsonObject object = je.getAsJsonObject();
-		Gson gson = new Gson();
-		CartDo cartDo = gson.fromJson(object, CartDo.class);
-		shoppingCartDo = changeToShoppingCart(cartDo);
+		ShoppingCartDo shoppingCartDo;
+		shoppingCartDo = getClientInfo(request);
 		ServiceResult<Boolean> result = cartService.addToShoppingCart(shoppingCartDo);
-		if (handleError(result, response)) return;
+		if (Client.handleError(result, response)) return;
 
 		JsonObject out = new JsonObject();
 		out.addProperty("status", true);
@@ -68,8 +52,21 @@ public class ShoppingCartController {
 	}
 
 	@RequestMapping(value = "/deleteFromShoppingCart")
-	public void deleteFromShoppingCart () {
+	public void deleteFromShoppingCart (HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+		String clientInfo = Client.readFromClient(new BufferedReader(request.getReader()));
+		JSONObject object = new JSONObject(clientInfo);
+		if(!object.has("goodsId")){
+			return;
+		}
+		String goodsId = object.getString("goodsId");
+
+		ServiceResult<Boolean> result = cartService.deleteFromShoppingCart(goodsId);
+		if (Client.handleError(result, response)) return;
+
+		JSONObject objOut = new JSONObject();
+		objOut.put("status", result.isSuccess());
+		Client.writeToClient(response.getWriter(), objOut);
 	}
 
 	@RequestMapping(value = "/queryShoppingCart")
@@ -89,13 +86,35 @@ public class ShoppingCartController {
 		userId = inObj.getString("userId");
 		ServiceResult<List<ShoppingCartDo>> result;
 		result = cartService.queryShoppingCart(userId);
-		if (handleError(result, response)) return;
+		if (Client.handleError(result, response)) return;
 
 		Gson cartGson = new Gson();
 		List<ShoppingCartDo> cartDos = result.getData();
 		Client.writeToClient(response.getWriter(), cartGson.toJson(cartDos));
 	}
 
+
+	private ShoppingCartDo getClientInfo(HttpServletRequest request) throws IOException {
+		ShoppingCartDo shoppingCartDo = new ShoppingCartDo();
+		BufferedReader bf = new BufferedReader(request.getReader());
+		String client = Client.readFromClient(bf);
+
+		System.out.println(client);
+
+		JsonParser jp = new JsonParser();
+		if (client == null) {
+			return null;
+		}
+		JsonElement je = jp.parse(client);
+		if (!je.isJsonObject()) {
+			return null;
+		}
+		JsonObject object = je.getAsJsonObject();
+		Gson gson = new Gson();
+		CartDo cartDo = gson.fromJson(object, CartDo.class);
+		shoppingCartDo = changeToShoppingCart(cartDo);
+		return shoppingCartDo;
+	}
 
 	private ShoppingCartDo changeToShoppingCart (CartDo cartDo) {
 
@@ -109,20 +128,13 @@ public class ShoppingCartController {
 		shoppingCartDo.setGoodsSize(cartDo.getGoodsDo().getGoodsSize());
 		shoppingCartDo.setGoodsType(cartDo.getGoodsDo().getGoodsType());
 		shoppingCartDo.setShopKeeperId(cartDo.getGoodsDo().getShopKeeperId());
+		shoppingCartDo.setGoodsExtra(cartDo.getGoodsDo().getGoodsExtras());
+
+		shoppingCartDo.setGoodsColorValue(cartDo.getGoodsDo().getGoodsColorValue());
+		shoppingCartDo.setGoodsTypeValue(cartDo.getGoodsDo().getGoodsTypeValue());
+		shoppingCartDo.setGoodsSizeValue(cartDo.getGoodsDo().getGoodsSizeValue());
 
 		return shoppingCartDo;
 	}
 
-	private boolean handleError (ServiceResult result, HttpServletResponse response) throws IOException {
-
-		if (null == result) {
-			response.sendError(ServerCode.DATABASE_OUT_NULL);
-			return true;
-		}
-		if (!result.isSuccess()) {
-			response.sendError(ServerCode.DATABASE_EXCEPTION);
-			return true;
-		}
-		return false;
-	}
 }

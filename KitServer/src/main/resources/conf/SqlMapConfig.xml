@@ -12,6 +12,7 @@
 	<sqlMap resource="./mapper/GoodsImgs.xml"/>
 	<sqlMap resource="./mapper/ShopApplication.xml"/>
 	<sqlMap resource="./mapper/ShoppingCart.xml"/>
+	<sqlMap resource="./mapper/Indent.xml"/>
 	<!--其他更多的对象映射文件将放置在此-->
 
 </sqlMapConfig>

@@ -18,6 +18,7 @@ public interface GoodsDao {
 	List<GoodsDo> findGoodsFirst() throws SQLException;
 
 	List<String> findGoodsUrl(String goodsId) throws SQLException;
+	String findGoodsDesc(String goodsId) throws SQLException;
 
 	//type
 	Integer findBrand(String brandValue) throws SQLException;

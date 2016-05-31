@@ -19,6 +19,12 @@ public class ShoppingCartDo implements Serializable {
 	private int goodsColor;
 	private int goodsType;
 
+	private String goodsColorValue;
+	private String goodsSizeValue;
+	private String goodsTypeValue;
+
+	private String goodsExtra;
+
 	public String getUserId () {
 
 		return userId;
@@ -97,5 +103,45 @@ public class ShoppingCartDo implements Serializable {
 	public void setGoodsType (int goodsType) {
 
 		this.goodsType = goodsType;
+	}
+
+	public String getGoodsExtra () {
+
+		return goodsExtra;
+	}
+
+	public void setGoodsExtra (String goodsExtra) {
+
+		this.goodsExtra = goodsExtra;
+	}
+
+	public String getGoodsColorValue () {
+
+		return goodsColorValue;
+	}
+
+	public void setGoodsColorValue (String goodsColorValue) {
+
+		this.goodsColorValue = goodsColorValue;
+	}
+
+	public String getGoodsSizeValue () {
+
+		return goodsSizeValue;
+	}
+
+	public void setGoodsSizeValue (String goodsSizeValue) {
+
+		this.goodsSizeValue = goodsSizeValue;
+	}
+
+	public String getGoodsTypeValue () {
+
+		return goodsTypeValue;
+	}
+
+	public void setGoodsTypeValue (String goodsTypeValue) {
+
+		this.goodsTypeValue = goodsTypeValue;
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
 		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
-<sqlMap>
+<sqlMap namespace="ShoppingCart">
 	<typeAlias alias="Cart" type="com.tanl.kitserver.model.bean.ShoppingCartDo"/>
 
 	<insert id="addToCart" parameterClass="Cart">
@@ -12,13 +12,32 @@
 		UPDATE tb_shopping_cart SET goodsChooseNumber = #num#
 	</update>
 
-	<delete id="deleteFromCart" parameterClass="Cart">
+	<delete id="deleteFromCart" parameterClass="String">
 		DELETE FROM tb_shopping_cart WHERE goodsId = #goodsId#
 	</delete>
 
 	<select id="queryChooseNumber" parameterClass="String" resultClass="Integer">
 		SELECT goodsChooseNumber FROM tb_shopping_cart WHERE goodsId = #goodsId#
 	</select>
+
+	<!--<select id="queryBrand" parameterClass="Integer" resultClass="String">-->
+		<!--SELECT brandName FROM tb_goods_brand WHERE brandId = #brandId#-->
+	<!--</select>-->
+	<!--<select id="queryType" parameterClass="Integer" resultClass="String">-->
+		<!--SELECT typeName FROM tb_goods_type WHERE typeId = #typeId#-->
+	<!--</select>-->
+	<!--<select id="querySize" parameterClass="Integer" resultClass="String">-->
+		<!--SELECT sizeValue FROM tb_goods_size WHERE sizeId = #sizeId#-->
+	<!--</select>-->
+	<!--<select id="queryColor" parameterClass="Integer" resultClass="String">-->
+		<!--SELECT colorValue FROM tb_goods_color WHERE colorId = #colorId#-->
+	<!--</select>-->
+
+	<select id="queryExtra" parameterClass="String" resultClass="String">
+		SELECT goodsExtras FROM tb_goods WHERE goodsId = #goodsId#
+	</select>
+
+
 	<select id="queryCart" parameterClass="String" resultClass="Cart">
 		SELECT * FROM tb_shopping_cart WHERE userId = #userId#
 	</select>

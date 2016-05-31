@@ -2,8 +2,11 @@ package com.tanl.kitserver.util.common;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.tanl.kitserver.util.ServerCode;
+import com.tanl.kitserver.util.ServiceResult;
 import org.json.JSONObject;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
@@ -75,5 +78,18 @@ public class Client {
 		String a = g.toJson(object);
 		System.out.println("\n\n" + a);
 		return writeToClient(writer, a);
+	}
+
+	public static boolean handleError (ServiceResult result, HttpServletResponse response) throws IOException {
+
+		if (null == result) {
+			response.sendError(ServerCode.DATABASE_OUT_NULL);
+			return true;
+		}
+		if (!result.isSuccess()) {
+			response.sendError(ServerCode.DATABASE_EXCEPTION);
+			return true;
+		}
+		return false;
 	}
 }

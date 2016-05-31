@@ -13,7 +13,7 @@ public interface ShoppingCartService {
 
 	ServiceResult<Boolean> addToShoppingCart (ShoppingCartDo shoppingCartDo);
 
-	ServiceResult<Boolean> deleteFromShoppingCart (ShoppingCartDo shoppingCartDo);
+	ServiceResult<Boolean> deleteFromShoppingCart (String goodsId);
 
 	ServiceResult<List<ShoppingCartDo>> queryShoppingCart (String userId);
 }

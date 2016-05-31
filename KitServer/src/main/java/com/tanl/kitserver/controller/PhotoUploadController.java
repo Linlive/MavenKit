@@ -5,7 +5,7 @@ import com.tanl.kitserver.service.GoodsImgsService;
 import com.tanl.kitserver.service.GoodsService;
 import com.tanl.kitserver.util.ServerRootPath;
 import com.tanl.kitserver.util.ServiceResult;
-import com.tanl.kitserver.util.common.GenerateGoodsId;
+import com.tanl.kitserver.util.common.GenerateRandomString;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -72,7 +72,7 @@ public class PhotoUploadController {
 		try {
 			//多个part上传
 			List<FileItem> list = upload.parseRequest(request);
-			goodsId = GenerateGoodsId.generateString();
+			goodsId = GenerateRandomString.generateString();
 			for (FileItem item : list) {
 				//获取表单属性名字。
 				String name = item.getFieldName();

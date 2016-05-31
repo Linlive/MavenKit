@@ -50,6 +50,10 @@ public class GoodsServiceImpl implements GoodsService {
 	public ServiceResult<Integer> findBrand (String brandValue) {
 
 		ServiceResult<Integer> result = new ServiceResult<Integer>();
+		if(null == brandValue || brandValue.length() == 0){
+			result.setSuccess(false);
+			return result;
+		}
 		Integer id;
 		try {
 			id = goodsDao.findBrand(brandValue);
@@ -67,6 +71,10 @@ public class GoodsServiceImpl implements GoodsService {
 	public ServiceResult<Integer> findType (String typeValue) {
 
 		ServiceResult<Integer> result = new ServiceResult<Integer>();
+		if(null == typeValue || typeValue.length() == 0){
+			result.setSuccess(false);
+			return result;
+		}
 		Integer id;
 		try {
 			id = goodsDao.findType(typeValue);
@@ -84,6 +92,10 @@ public class GoodsServiceImpl implements GoodsService {
 	public ServiceResult<Integer> findSize (String sizeValue) {
 
 		ServiceResult<Integer> result = new ServiceResult<Integer>();
+		if(null == sizeValue || sizeValue.length() == 0){
+			result.setSuccess(false);
+			return result;
+		}
 		Integer id;
 		try {
 			id = goodsDao.findSize(sizeValue);
@@ -101,6 +113,10 @@ public class GoodsServiceImpl implements GoodsService {
 	public ServiceResult<Integer> findColor (String colorValue) {
 
 		ServiceResult<Integer> result = new ServiceResult<Integer>();
+		if(null == colorValue || colorValue.length() == 0){
+			result.setSuccess(false);
+			return result;
+		}
 		Integer id;
 		try {
 			id = goodsDao.findColor(colorValue);

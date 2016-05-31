@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Indent">
+	<typeAlias alias="Indent" type="com.tanl.kitserver.model.bean.IndentDo"/>
+	<typeAlias alias="IndentView" type="com.tanl.kitserver.model.bean.IndentViewDo"/>
+
+	<insert id="createIndent" parameterClass="Indent">
+		insert into tb_indent (indentNumber, buyerId, shopKeeperId, indentState, goodsId, goodsSize, goodsType)
+		values (#indentNumber#, #buyerId#, #shopKeeperId#, #indentState#, #goodsId#, #goodsSize#, #goodsType#);
+	</insert>
+
+	<select id="viewIndent" parameterClass="String" resultClass="Indent">
+		SELECT * FROM tb_indent WHERE indentNumber = #indentId#;
+	</select>
+
+	<parameterMap id="viewIndentMap" class="java.util.HashMap">
+		<parameter property="buyerId" javaType="String"/>
+		<parameter property="indentState" javaType="Integer"/>
+	</parameterMap>
+	<select id="viewIndentByState" parameterMap="viewIndentMap" resultClass="Indent">
+		SELECT * FROM tb_indent WHERE buyerId = #buyerId# AND indentState = #indentState#
+	</select>
+
+
+
+	<select id="viewIndentByUserId" parameterClass="String" resultClass="Indent">
+		SELECT * FROM tb_indent WHERE buyerId = #userId#;
+	</select>
+
+
+	<!--查看状态值-->
+	<select id="findStateValue" parameterClass="Integer" resultClass="String">
+		SELECT indentStateValue FROM tb_indent_state WHERE indentStateId = #stateId#
+	</select>
+	<!--查看状态id-->
+	<select id="findState" parameterClass="String" resultClass="Integer">
+		SELECT indentStateId FROM tb_indent_state WHERE indentStateValue = #stateValue#
+	</select>
+</sqlMap>

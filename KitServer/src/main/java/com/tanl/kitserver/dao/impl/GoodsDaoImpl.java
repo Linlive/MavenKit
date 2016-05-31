@@ -148,4 +148,9 @@ public class GoodsDaoImpl implements GoodsDao {
 		}
 		return imgs;
 	}
+
+	public String findGoodsDesc (String goodsId) throws SQLException {
+
+		return (String) sqlMapClient.queryForObject("queryGoodsDesc", goodsId);
+	}
 }
