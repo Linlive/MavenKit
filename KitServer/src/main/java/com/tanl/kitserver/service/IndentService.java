@@ -13,12 +13,12 @@ import java.util.List;
 public interface IndentService {
 	ServiceResult<Boolean> createIndent(IndentDo indentDo);
 	ServiceResult<Boolean> editIndent(IndentDo indentDo);
-	ServiceResult<IndentDo> viewIndent(String indentId);
-	ServiceResult<List<IndentViewDo>> viewIndent(IndentViewDo indentViewDo);
-	ServiceResult<IndentDo> viewIndentByUserId(String userId);
+	ServiceResult<IndentDo> queryIndent(String indentId);
+	ServiceResult<List<IndentViewDo>> queryIndent(IndentViewDo indentViewDo);
+	ServiceResult<List<IndentViewDo>> queryIndentByUserId(String userId);
 
 
 
-	ServiceResult<Boolean> removeIndent(String indentId);
+	ServiceResult<Boolean> removeIndent(String indentNumber);
 	ServiceResult<Boolean> deleteIndent(String indentId);
 }

@@ -70,7 +70,7 @@ public class GoodsIndexController {
 			if(i == len){
 				continue;
 			}
-			sb.append(",");
+			sb.append(",");;//避免警告
 		}
 		sb.append("]}");
 		Client.writeToClient(response.getWriter(), sb.toString());
@@ -84,4 +84,5 @@ public class GoodsIndexController {
 	public void getAllGoodsByRecommend() {
 
 	}
+
 }

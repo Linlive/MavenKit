@@ -39,6 +39,11 @@
 		INSERT INTO tb_user (userId, userName , userPassword) VALUES (#userName#, #userName#, #userPassword#)
 		<selectKey resultClass="int" keyProperty="id">SELECT @@IDENTITY</selectKey>
 	</insert>
+
+	<update id="resetPassword" parameterClass="User">
+		UPDATE tb_user SET userPassword = #userPassword# WHERE userId = #userId# OR userPhone = #userPhone#
+	</update>
+
 	<!--<select id="findUser" resultMap="resultOut" parameterClass="String">-->
 		<!--SELECT u FROM user u WHERE (u.u_id = #userId#) OR (u.u_id = #id#)-->
 	<!--</select>-->

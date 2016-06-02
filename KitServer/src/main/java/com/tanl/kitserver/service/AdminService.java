@@ -8,4 +8,5 @@ import com.tanl.kitserver.util.ServiceResult;
  */
 public interface AdminService {
 	ServiceResult<AdminDo> queryUser(AdminDo adminDo);
+	ServiceResult<Integer> insertUser(AdminDo adminDo);
 }

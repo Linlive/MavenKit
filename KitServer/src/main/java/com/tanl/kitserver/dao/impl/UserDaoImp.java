@@ -38,6 +38,14 @@ public class UserDaoImp extends SqlMapClientDaoSupport implements UserDao {
 		return Integer.valueOf(o.toString());
 	}
 
+	public boolean resetPassword (UserDo userDo) throws SQLException {
+		int colum = sqlMapClient.update("resetPassword", userDo);
+		if(colum < 1){
+			return false;
+		}
+		return true;
+	}
+
 	public UserDo queryUser (UserDo userDo) throws SQLException {
 
 //		List users = sqlMapClient.queryForList("queryUserInfoAll", userDo);

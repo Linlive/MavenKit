@@ -9,4 +9,5 @@ import java.sql.SQLException;
  */
 public interface AdminDao {
 	AdminDo queryAdminInfo(AdminDo adminDo) throws SQLException;
+	Integer updateAdminInfo(AdminDo adminDo) throws SQLException;
 }

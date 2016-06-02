@@ -9,7 +9,10 @@ import java.util.List;
  * Created by Administrator on 2016/6/1.
  */
 public class IndentViewDo {
+
 	private String buyerId;
+	private String shopkeeperId;
+
 	private List<String> pictureUrls;
 	private String goodsName;
 	private String goodsDesc;
@@ -63,5 +66,15 @@ public class IndentViewDo {
 	public void setIndentState (String indentState) {
 
 		this.indentState = indentState;
+	}
+
+	public String getShopkeeperId () {
+
+		return shopkeeperId;
+	}
+
+	public void setShopkeeperId (String shopkeeperId) {
+
+		this.shopkeeperId = shopkeeperId;
 	}
 }

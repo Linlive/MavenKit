@@ -5,10 +5,13 @@
 
 	<typeAlias alias="Admin" type="com.tanl.kitserver.model.bean.AdminDo"/>
 
+
 	<select id="queryAdmin" resultClass="Admin" parameterClass="Admin">
 		SELECT password FROM tb_admin WHERE name = #name#
 	</select>
-
+	<update id="updateAdmin" parameterClass="Admin">
+		UPDATE tb_admin set password = #password# WHERE name = #name#;
+	</update>
 	<select id="dd">
 		SELECT tbName FROM tb_permission_group WHERE groupId in( SELECT permissionLevel FROM tb_user WHERE userId = 'aa')
 	</select>

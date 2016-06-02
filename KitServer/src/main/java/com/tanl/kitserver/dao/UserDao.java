@@ -13,6 +13,7 @@ import java.util.Map;
 //@Component
 public interface UserDao {
 	int insert(UserDo user) throws SQLException;
+	boolean resetPassword(UserDo user) throws SQLException;
 	UserDo queryUserInfo(Map param) throws SQLException;
 	List<UserDo> queryAllUser(Map param) throws SQLException;
 }

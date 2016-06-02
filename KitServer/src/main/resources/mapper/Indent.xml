@@ -10,23 +10,40 @@
 		values (#indentNumber#, #buyerId#, #shopKeeperId#, #indentState#, #goodsId#, #goodsSize#, #goodsType#);
 	</insert>
 
-	<select id="viewIndent" parameterClass="String" resultClass="Indent">
-		SELECT * FROM tb_indent WHERE indentNumber = #indentId#;
+	<select id="queryIndent" parameterClass="String" resultClass="Indent">
+		SELECT * FROM tb_indent WHERE indentNumber = #indentNumber#;
 	</select>
 
 	<parameterMap id="viewIndentMap" class="java.util.HashMap">
 		<parameter property="buyerId" javaType="String"/>
+		<parameter property="shopKeeperId" javaType="String"/>
 		<parameter property="indentState" javaType="Integer"/>
 	</parameterMap>
-	<select id="viewIndentByState" parameterMap="viewIndentMap" resultClass="Indent">
+
+	<select id="userQueryIndentByState" parameterMap="viewIndentMap" resultClass="Indent">
 		SELECT * FROM tb_indent WHERE buyerId = #buyerId# AND indentState = #indentState#
 	</select>
+	<select id="shopkeeperQueryIndentByState" parameterMap="viewIndentMap" resultClass="Indent">
+		SELECT * FROM tb_indent WHERE shopKeeperId = #shopKeeperId# AND indentState = #indentState#
+	</select>
 
 
-
-	<select id="viewIndentByUserId" parameterClass="String" resultClass="Indent">
+	<select id="queryIndentByUserId" parameterClass="String" resultClass="Indent">
 		SELECT * FROM tb_indent WHERE buyerId = #userId#;
 	</select>
+
+
+	<update id="editIndent" parameterClass="Indent">
+		UPDATE tb_indent SET
+		indentState = #indentState#, goodsId = #goodsId#, goodsSize = #goodsSize#,
+		 goodsType = #goodsType# WHERE (buyerId = #buyerId# OR shopKeeperId = #shopKeeperId#) AND indentNumber = #indentNumber#
+	</update>
+
+
+	<delete id="removeIndent" parameterClass="String">
+		DELETE FROM tb_indent WHERE indentNumber = #indentNumber#
+	</delete>
+
 
 
 	<!--查看状态值-->

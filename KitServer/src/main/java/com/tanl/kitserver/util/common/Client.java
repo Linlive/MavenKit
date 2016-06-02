@@ -31,6 +31,22 @@ public class Client {
 		return sb.toString();
 	}
 
+	public static void writeOkToClient (HttpServletResponse response) throws IOException {
+		writeOkToClient(response.getWriter());
+	}
+	public static void writeOkToClient (Writer writer) throws IOException {
+		JSONObject out = new JSONObject();
+		out.put("status", true);
+		writeToClient(writer, out);
+	}
+	public static boolean writeToClient (Writer writer, Object object) throws IOException {
+		if(object == null){
+			return false;
+		}
+		Gson g = new Gson();
+		return writeToClient(writer, g.toJson(object));
+	}
+
 	/**
 	 *
 	 * @param writer

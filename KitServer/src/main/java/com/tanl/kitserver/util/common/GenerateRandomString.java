@@ -10,6 +10,7 @@ public class GenerateRandomString {
 	private static final String GOODS_ID_BASE = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-=_";
 	private static final int GOODS_ID_BASE_LENGTH = GOODS_ID_BASE.length();
 	private static final int GOODS_ID_LEN = 20;
+	private static final int SMS_CODE_LEN = 6;
 
 	/**
 	 * 随机生成字符串，组成商品的目录
@@ -18,11 +19,25 @@ public class GenerateRandomString {
 	 */
 	public static String generateString () {
 
+		return generateString(GOODS_ID_LEN);
+	}
+	public static String generateString (int length) {
+
 		Random random = new Random();
 		StringBuilder sb = new StringBuilder();
 
-		for (int i = 0; i < GOODS_ID_LEN; i++) {
+		for (int i = 0; i < length; i++) {
 			sb.append(GOODS_ID_BASE.charAt(random.nextInt(GOODS_ID_BASE_LENGTH)));
+		}
+		return sb.toString();
+	}
+	public static String generateVerificationString (int length) {
+
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < length; i++) {
+			sb.append(GOODS_ID_BASE.charAt(random.nextInt(10)));
 		}
 		return sb.toString();
 	}

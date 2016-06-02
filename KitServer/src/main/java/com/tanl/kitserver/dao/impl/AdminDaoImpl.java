@@ -23,4 +23,10 @@ public class AdminDaoImpl implements AdminDao {
 
 		return (AdminDo)sqlMapClient.queryForObject("queryAdmin", adminDo);
 	}
+
+	public Integer updateAdminInfo (AdminDo adminDo) throws SQLException {
+
+		Integer a = sqlMapClient.update("updateAdmin", adminDo);
+		return a;
+	}
 }

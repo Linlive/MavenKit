@@ -13,4 +13,6 @@ public interface UserService {
 	ServiceResult<Integer> insertUser(UserDo user);
 	ServiceResult<UserDo> queryUserInfo (Map param);
 	ServiceResult<List<UserDo>> queryAllUser (Map param);
+
+	ServiceResult<Boolean> resetPassword(UserDo user);
 }

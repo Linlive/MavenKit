@@ -63,4 +63,16 @@ public class UserServiceImpl implements UserService {
 		}
 		return result;
 	}
+
+	public ServiceResult<Boolean> resetPassword (UserDo user) {
+		ServiceResult<Boolean> result = new ServiceResult<Boolean>();
+		try {
+			boolean daoResult = userDao.resetPassword(user);
+			result.setSuccess(true);
+			result.setData(daoResult);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

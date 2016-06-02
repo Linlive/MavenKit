@@ -31,4 +31,18 @@ public class AdminServiceImpl implements AdminService {
 		}
 		return result;
 	}
+
+	public ServiceResult<Integer> insertUser (AdminDo adminDo) {
+
+		Integer retAdminDo;
+		ServiceResult<Integer> result = new ServiceResult<Integer>();
+		try {
+			retAdminDo = adminDao.updateAdminInfo(adminDo);
+			result.setSuccess(true);
+			result.setData(retAdminDo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

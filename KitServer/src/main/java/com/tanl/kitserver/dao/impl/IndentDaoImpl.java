@@ -29,21 +29,42 @@ public class IndentDaoImpl implements IndentDao {
 	}
 
 	public boolean editIndent (IndentDo indentDo) throws SQLException {
-
+		int updateNum = sqlMapClient.update("editIndent", indentDo);
+		if(updateNum >= 1){
+			return true;
+		}
 		return false;
 	}
 
-	public IndentDo viewIndent (String indentId) throws SQLException {
-		return (IndentDo) sqlMapClient.insert("viewIndent", indentId);
+	public IndentDo viewIndent (String indentNumber) throws SQLException {
+		return (IndentDo) sqlMapClient.insert("queryIndent", indentNumber);
 	}
 
 	public List<IndentViewDo> viewIndent (IndentViewDo indentViewDo) throws SQLException {
+		if(indentViewDo == null){
+			return null;
+		}
 		int stateId = findStateId(indentViewDo.getIndentState());
 
+		if(indentViewDo.getShopkeeperId() == null || indentViewDo.getShopkeeperId().length() <= 0){
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("buyerId", indentViewDo.getBuyerId());
+			map.put("indentState", stateId);
+			List retList = sqlMapClient.queryForList("userQueryIndentByState", map);
+			return changeIndentToIndeView(retList);
+		}
+		return shopkeeperQueryIndent(indentViewDo.getShopkeeperId(), stateId);
+	}
+
+	private List<IndentViewDo> shopkeeperQueryIndent(String shopkeeperId, int stateId) throws SQLException {
+
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("buyerId", indentViewDo.getBuyerId());
+		map.put("shopkeeperId", shopkeeperId);
 		map.put("indentState", stateId);
-		List retList = sqlMapClient.queryForList("viewIndentByState", map);
+		List retList = sqlMapClient.queryForList("shopkeeperQueryIndentByState", map);
+		return changeIndentToIndeView(retList);
+	}
+	private List<IndentViewDo> changeIndentToIndeView(List retList) throws SQLException {
 		List<IndentViewDo> resultList = new LinkedList<IndentViewDo>();
 		IndentViewDo viewDo;
 		for(Object o : retList){
@@ -53,7 +74,6 @@ public class IndentDaoImpl implements IndentDao {
 		}
 		return resultList;
 	}
-
 	/**
 	 * 将IndentDo转换成IndentViewDo
 	 * @param indentDo do
@@ -67,19 +87,37 @@ public class IndentDaoImpl implements IndentDao {
 		viewDo.setGoodsName(getGoodsName(goodsId));
 		viewDo.setPictureUrls(goodsDao.findGoodsUrl(goodsId));
 		viewDo.setGoodsDesc(goodsDao.findGoodsDesc(goodsId));
+		viewDo.setIndentState(findStateValue(indentDo.getIndentState()));
 		return viewDo;
 	}
 
-	public IndentDo viewIndentByUserId (String userId) throws SQLException {
-		return (IndentDo) sqlMapClient.insert("viewIndentByUserId", userId);
+	public List<IndentViewDo> viewIndentByUserId (String buyerId) throws SQLException {
+		List<IndentViewDo> resultList = new LinkedList<IndentViewDo>();
+		List daoResult = sqlMapClient.queryForList("queryIndentByUserId", buyerId);
+		IndentViewDo viewDo;
+		for(Object o : daoResult){
+			IndentDo indentDo = (IndentDo) o;
+			viewDo = changeIndentToIndentViewDo(indentDo);
+			resultList.add(viewDo);
+		}
+		return resultList;
 	}
 
-	public boolean removeIndent (String indentId) throws SQLException {
-
+	public boolean removeIndent (String indentNumber) throws SQLException {
+		int num = sqlMapClient.delete("removeIndent", indentNumber);
+		if(num >= 1){
+			return true;
+		}
 		return false;
 	}
 
-	public boolean deleteIndent (String indentId) throws SQLException {
+	/**
+	 * 暂未实现
+	 * @param indentNumber
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean deleteIndent (String indentNumber) throws SQLException {
 
 		return false;
 	}

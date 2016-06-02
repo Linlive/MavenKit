@@ -21,6 +21,8 @@ public class GoodsDo {
 	private float goodsPrice;
 	private int goodsRepertory;
 
+	private String goodsComments;
+
 	//所属商家
 	private String shopKeeperId;
 
@@ -125,6 +127,16 @@ public class GoodsDo {
 	public void setGoodsRepertory (int goodsRepertory) {
 
 		this.goodsRepertory = goodsRepertory;
+	}
+
+	public String getGoodsComments () {
+
+		return goodsComments;
+	}
+
+	public void setGoodsComments (String goodsComments) {
+
+		this.goodsComments = goodsComments;
 	}
 
 	public String getShopKeeperId () {

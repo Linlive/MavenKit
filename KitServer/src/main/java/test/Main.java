@@ -5,6 +5,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.junit.Test;
 
 
 /**
@@ -13,8 +14,18 @@ import org.apache.commons.httpclient.methods.PostMethod;
  */
 public class Main {
 
+	static int value = 10;
+	@Test
+	public void tt(){
+		aa(value);
 
-	public static void main(String[] args) throws Exception {
+		System.out.println(value);
+	}
+	public void aa(int value){
+		value = 100;
+	}
+
+	public static void main1(String[] args) throws Exception {
 
 		HttpClient client = new HttpClient();
 		PostMethod post = new PostMethod("http://gbk.sms.webchinese.cn");

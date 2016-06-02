@@ -19,6 +19,9 @@ public class IndentServiceImpl implements IndentService {
 	IndentDao indentDao;
 
 	public ServiceResult<Boolean> createIndent (IndentDo indentDo) {
+		if(null == indentDo){
+			return null;
+		}
 		ServiceResult<Boolean> result = new ServiceResult<Boolean>();
 		try {
 
@@ -33,11 +36,23 @@ public class IndentServiceImpl implements IndentService {
 	}
 
 	public ServiceResult<Boolean> editIndent (IndentDo indentDo) {
+		ServiceResult<Boolean> result = new ServiceResult<Boolean>();
+		try {
+			boolean editSuccess = indentDao.editIndent(indentDo);
+			result.setSuccess(true);
+			result.setData(editSuccess);
 
-		return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
-	public ServiceResult<IndentDo> viewIndent (String indentId) {
+	public ServiceResult<IndentDo> queryIndent (String indentId) {
+		if(null == indentId){
+			return null;
+		}
 		ServiceResult<IndentDo> result = new ServiceResult<IndentDo>();
 		IndentDo indentDo;
 		try {
@@ -50,7 +65,10 @@ public class IndentServiceImpl implements IndentService {
 		return result;
 	}
 
-	public ServiceResult<List<IndentViewDo>> viewIndent (IndentViewDo indentViewDo) {
+	public ServiceResult<List<IndentViewDo>> queryIndent (IndentViewDo indentViewDo) {
+		if(null == indentViewDo){
+			return null;
+		}
 		ServiceResult<List<IndentViewDo>> result = new ServiceResult<List<IndentViewDo>>();
 		try {
 			List<IndentViewDo> retList = indentDao.viewIndent(indentViewDo);
@@ -63,14 +81,16 @@ public class IndentServiceImpl implements IndentService {
 		return result;
 	}
 
-	public ServiceResult<IndentDo> viewIndentByUserId (String userId) {
-
-		ServiceResult<IndentDo> result = new ServiceResult<IndentDo>();
-		IndentDo indentDo;
+	public ServiceResult<List<IndentViewDo>> queryIndentByUserId (String userId) {
+		if(null == userId){
+			return null;
+		}
+		ServiceResult<List<IndentViewDo>> result = new ServiceResult<List<IndentViewDo>>();
+		List<IndentViewDo> indentDoList;
 		try {
-			indentDo = indentDao.viewIndentByUserId(userId);
+			indentDoList = indentDao.viewIndentByUserId(userId);
 			result.setSuccess(true);
-			result.setData(indentDo);
+			result.setData(indentDoList);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -78,9 +98,21 @@ public class IndentServiceImpl implements IndentService {
 		return result;
 	}
 
-	public ServiceResult<Boolean> removeIndent (String indentId) {
+	public ServiceResult<Boolean> removeIndent (String indentNumber) {
+		if(null == indentNumber){
+			return null;
+		}
 
-		return null;
+		ServiceResult<Boolean> result = new ServiceResult<Boolean>();
+		try {
+			Boolean ret = indentDao.removeIndent(indentNumber);
+			result.setSuccess(true);
+			result.setData(ret);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	public ServiceResult<Boolean> deleteIndent (String indentId) {

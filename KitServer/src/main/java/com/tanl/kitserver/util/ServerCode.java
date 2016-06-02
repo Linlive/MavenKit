@@ -11,4 +11,6 @@ public class ServerCode {
 
 	public static final int DATABASE_EXCEPTION = 501;
 	public static final int DATABASE_OUT_NULL = 502;
+
+	public static final int DATA_FORMAT_ERROR = 510;
 }
