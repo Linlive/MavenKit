@@ -18,7 +18,9 @@
 
 
 	<select id="getGoodsName" parameterClass="String" resultClass="String">
-		SELECT goodsName FROM tb_goods WHERE goodsId = #goodsId#
+		SELECT goodsName
+		FROM tb_goods
+		WHERE goodsId = #goodsId#
 	</select>
 
 	<!--商品的基本类型，用int表示，便于扩展-->
@@ -59,7 +61,7 @@
 	</select>
 	<insert id="insertSize" parameterClass="String">
 		INSERT INTO tb_goods_size(sizeValue) VALUES (#sizeValue#)
-		<selectKey resultClass="int">SELECT @@IDENTITY </selectKey>
+		<selectKey resultClass="int">SELECT @@IDENTITY</selectKey>
 
 	</insert>
 	<select id="querySizeValue" parameterClass="Integer" resultClass="String">
@@ -84,32 +86,61 @@
 	</select>
 
 	<select id="queryImgs" resultClass="String" parameterClass="String">
-		SELECT tb_goods_img.goodsImgRootPath FROM tb_goods_img WHERE goodsId = #goodsId#
+		SELECT tb_goods_img.goodsImgRootPath
+		FROM tb_goods_img
+		WHERE goodsId = #goodsId#
 	</select>
 	<select id="queryGoodsDesc" parameterClass="String" resultClass="String">
-		SELECT goodsExtras FROM tb_goods WHERE goodsId = #goodsId#
+		SELECT goodsExtras
+		FROM tb_goods
+		WHERE goodsId = #goodsId#
 	</select>
 	<select id="queryGoodsExtra" parameterClass="String" resultClass="String">
-		SELECT goodsExtras FROM tb_goods WHERE goodsId = #goodsId#
+		SELECT goodsExtras
+		FROM tb_goods
+		WHERE goodsId = #goodsId#
 	</select>
 
+	<typeAlias alias="page" type="com.tanl.kitserver.model.bean.MyPage"/>
 
 	<!--商品的集中查询-->
+	<select id="goodsAllCount" resultClass="Integer">
+		SELECT count(*)
+		FROM tb_goods;
+	</select>
 	<select id="queryGoodsById" resultClass="Goods">
 		SELECT *
 		FROM tb_goods
 		WHERE goodsId = #goodsId#
 	</select>
-	<select id="queryGoodsByShopKeeper" parameterClass="User" resultClass="Goods">
+
+	<parameterMap id="queryShopkeeperGoods" class="map">
+		<parameter property="shopkeeperId" javaType="String"/>
+		<parameter property="startColumn" javaType="int"/>
+		<parameter property="pageSize" javaType="int"/>
+
+	</parameterMap>
+
+	<select id="queryGoodsByShopKeeper" parameterClass="HashMap" resultClass="Goods">
 		SELECT *
 		FROM tb_goods
-		WHERE shopKeeperId = #userId# ORDER BY goodsPrice LIMIT 20
+		WHERE shopkeeperId = $shopkeeperId$ ORDER BY  uploadTime LIMIT $startColumn$, $pageSize$
 	</select>
 	<select id="queryGoodsDefault" resultClass="Goods">
 		SELECT *
 		FROM tb_goods
-		LIMIT 20;
+		ORDER BY uploadTime DESC
+		LIMIT 5;
 	</select>
 
+
+
+
+	<select id="loadMoreGoods" parameterClass="page" resultClass="Goods">
+		SELECT *
+		FROM tb_goods
+		ORDER BY uploadTime DESC
+		LIMIT #startColumn#, #pageSize#
+	</select>
 
 </sqlMap>

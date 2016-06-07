@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Application">
+	<typeAlias alias="Application" type="com.tanl.kitserver.model.bean.UserApplication"/>
+	<insert id="addApplication" parameterClass="Application">
+		insert into tb_user_application (userId, applicationType, applicationState) values (#userId#, #applicationType#, #applicationState#);
+		<selectKey resultClass="int" keyProperty="id">SELECT @@IDENTITY</selectKey>
+	</insert>
+	<select id="queryState" parameterClass="Application" resultClass="Integer">
+		SELECT applicationState FROM tb_user_application WHERE userId = #userId#
+	</select>
+	<select id="querySateValue" parameterClass="Integer" resultClass="String">
+		SELECT stateValue FROM tb_user_application_state WHERE stateId = #stateId#
+	</select>
+	
+
+	<select id="queryApplicationByState" parameterClass="Integer" resultClass="Application">
+		SELECT * FROM tb_user_application WHERE applicationState = #applicationState#;
+	</select>
+
+	<update id="updateApplicationState" parameterClass="String">
+		UPDATE tb_user_application SET applicationState = 2 WHERE userId = #userId#
+	</update>
+
+	<update id="acceptApplication" parameterClass="Long">
+		UPDATE tb_user_application SET applicationState = 2 WHERE id = #applicationId#
+	</update>
+	<update id="rejectApplication" parameterClass="Integer">
+		UPDATE tb_user_application SET applicationState = 3 WHERE id = #applicationId#
+	</update>
+
+</sqlMap>

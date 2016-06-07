@@ -22,21 +22,8 @@
 		<parameter property="userName" javaType="String"/>
 	</parameterMap>
 
-	<!--<statement id="createTable" parameterClass="User">-->
-		<!--CREATE TABLE tb_user(-->
-			<!--id BIGINT IDENTITY NOT NULL PRIMARY KEY,-->
-			<!--u_Id VARCHAR(20) ,-->
-			<!--u_password VARCHAR(25),-->
-			<!--u_name VARCHAR(20),-->
-			<!--u_age TINYINT,-->
-			<!--u_phone VARCHAR(12),-->
-			<!--u_emailAddress VARCHAR(20)-->
-		<!--)-->
-	<!--</statement>-->
-
-
 	<insert id="insertUser" parameterClass="User">
-		INSERT INTO tb_user (userId, userName , userPassword) VALUES (#userName#, #userName#, #userPassword#)
+		INSERT INTO tb_user (userId, userName , userPassword) VALUES (#userId#, #userName#, #userPassword#)
 		<selectKey resultClass="int" keyProperty="id">SELECT @@IDENTITY</selectKey>
 	</insert>
 
@@ -48,11 +35,26 @@
 		<!--SELECT u FROM user u WHERE (u.u_id = #userId#) OR (u.u_id = #id#)-->
 	<!--</select>-->
 
-	<select id="getUserInfo" parameterClass="map" resultClass="User">
-		SELECT * FROM tb_user WHERE userName = #userName#
+	<select id="getUserInfo" parameterClass="String" resultClass="User">
+		SELECT * FROM tb_user WHERE userId = #userId#
 	</select>
+
+	<select id="queryUserInfo" parameterClass="String" resultClass="User">
+		SELECT permissionLevel FROM tb_user WHERE userId = #userId#
+	</select>
+
 	<select id="getAllUser" resultClass="User">
 		SELECT * FROM tb_user
 	</select>
+
+
+	<update id="updateUserShopInfo" parameterClass="User">
+		UPDATE tb_user SET shopKeeper = #shopKeeper# WHERE userId = #userId#
+	</update>
+
+	<!--    用户申请       -->
+
+
+
 
 </sqlMap>

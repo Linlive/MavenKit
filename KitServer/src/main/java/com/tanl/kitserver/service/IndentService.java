@@ -13,8 +13,8 @@ import java.util.List;
 public interface IndentService {
 	ServiceResult<Boolean> createIndent(IndentDo indentDo);
 	ServiceResult<Boolean> editIndent(IndentDo indentDo);
-	ServiceResult<IndentDo> queryIndent(String indentId);
-	ServiceResult<List<IndentViewDo>> queryIndent(IndentViewDo indentViewDo);
+	ServiceResult<IndentDo> queryUserIndentCustom (String indentId);
+	ServiceResult<List<IndentViewDo>> queryUserIndentCustom (IndentViewDo indentViewDo);
 	ServiceResult<List<IndentViewDo>> queryIndentByUserId(String userId);
 
 

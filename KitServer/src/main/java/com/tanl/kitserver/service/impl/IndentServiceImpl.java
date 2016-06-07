@@ -49,14 +49,14 @@ public class IndentServiceImpl implements IndentService {
 		return result;
 	}
 
-	public ServiceResult<IndentDo> queryIndent (String indentId) {
+	public ServiceResult<IndentDo> queryUserIndentCustom (String indentId) {
 		if(null == indentId){
 			return null;
 		}
 		ServiceResult<IndentDo> result = new ServiceResult<IndentDo>();
 		IndentDo indentDo;
 		try {
-			indentDo = indentDao.viewIndent(indentId);
+			indentDo = indentDao.queryUserIndentCustom(indentId);
 			result.setSuccess(true);
 			result.setData(indentDo);
 		} catch (SQLException e) {
@@ -65,13 +65,13 @@ public class IndentServiceImpl implements IndentService {
 		return result;
 	}
 
-	public ServiceResult<List<IndentViewDo>> queryIndent (IndentViewDo indentViewDo) {
+	public ServiceResult<List<IndentViewDo>> queryUserIndentCustom (IndentViewDo indentViewDo) {
 		if(null == indentViewDo){
 			return null;
 		}
 		ServiceResult<List<IndentViewDo>> result = new ServiceResult<List<IndentViewDo>>();
 		try {
-			List<IndentViewDo> retList = indentDao.viewIndent(indentViewDo);
+			List<IndentViewDo> retList = indentDao.queryUserIndentCustom(indentViewDo);
 			result.setSuccess(true);
 			result.setData(retList);
 

@@ -13,9 +13,11 @@ import java.util.List;
 public interface IndentDao {
 	boolean createIndent(IndentDo indentDo) throws SQLException;
 	boolean editIndent(IndentDo indentDo) throws SQLException;
-	IndentDo viewIndent(String indentNumber) throws SQLException;
-	List<IndentViewDo> viewIndent(IndentViewDo indentViewDo) throws SQLException;
+	IndentDo queryUserIndentCustom (String indentNumber) throws SQLException;
+	List<IndentViewDo> queryUserIndentCustom (IndentViewDo indentViewDo) throws SQLException;
+	//List<IndentViewDo> queryShopkeeperIndentCustom (String shopkeeperId, int stateId) throws SQLException;
 	List<IndentViewDo> viewIndentByUserId(String userId) throws SQLException;
+	List<IndentViewDo> viewIndentByShopkeeperId (String shopkeeper) throws SQLException;
 
 
 	boolean removeIndent(String indentNumber) throws SQLException;

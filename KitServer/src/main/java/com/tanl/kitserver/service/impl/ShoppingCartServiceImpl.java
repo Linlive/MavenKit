@@ -1,5 +1,6 @@
 package com.tanl.kitserver.service.impl;
 
+import com.tanl.kitserver.dao.GoodsDao;
 import com.tanl.kitserver.dao.ShoppingCartDao;
 import com.tanl.kitserver.model.bean.ShoppingCartDo;
 import com.tanl.kitserver.service.ShoppingCartService;
@@ -17,6 +18,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 	@Resource(name = "shoppingCartDao")
 	ShoppingCartDao shoppingCartDao;
+
+	@Resource(name = "goodsDao")
+	GoodsDao goodsDao;
 
 	public ServiceResult<Boolean> addToShoppingCart (ShoppingCartDo shoppingCartDo) {
 
@@ -52,6 +56,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 		ServiceResult<List<ShoppingCartDo>> result = new ServiceResult<List<ShoppingCartDo>>();
 		try {
 			List<ShoppingCartDo> data = shoppingCartDao.queryShoppingCart(userId);
+			setImages(data);
 			result.setSuccess(true);
 			result.setData(data);
 
@@ -59,5 +64,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	private void setImages(List<ShoppingCartDo> cartList) throws SQLException {
+		for(ShoppingCartDo cartDo : cartList){
+			List<String> urls = goodsDao.findGoodsUrl(cartDo.getGoodsId());
+			if(null == urls || urls.size() == 0){
+				continue;
+			}
+			cartDo.setImgUrl(urls.get(0));
+		}
 	}
 }

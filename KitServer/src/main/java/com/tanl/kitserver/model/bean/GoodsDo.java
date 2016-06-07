@@ -1,5 +1,6 @@
 package com.tanl.kitserver.model.bean;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -34,6 +35,8 @@ public class GoodsDo {
 	private List<String> imgUrlList;
 	// 额外信息
 	private String goodsExtras;
+
+	private Timestamp uploadTime;
 
 	public GoodsDo(){
 
@@ -207,6 +210,16 @@ public class GoodsDo {
 	public void setImgUrlList (List<String> imgUrlList) {
 
 		this.imgUrlList = imgUrlList;
+	}
+
+	public Timestamp getUploadTime () {
+
+		return uploadTime;
+	}
+
+	public void setUploadTime (Timestamp uploadTime) {
+
+		this.uploadTime = uploadTime;
 	}
 
 	@Override

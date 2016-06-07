@@ -54,7 +54,9 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 		Object sizeValue = sqlMapClient.queryForObject("querySizeValue", cartDo.getGoodsSize());
 		Object colorValue = sqlMapClient.queryForObject("queryColorValue", cartDo.getGoodsColor());
 		Object extraValue = sqlMapClient.queryForObject("queryExtra", cartDo.getGoodsId());
+		Object goodsName = sqlMapClient.queryForObject("getGoodsName", cartDo.getGoodsId());
 
+		cartDo.setGoodsName((String) goodsName);
 		cartDo.setGoodsTypeValue((String) typeValue);
 		cartDo.setGoodsSizeValue((String) sizeValue);
 		cartDo.setGoodsColorValue((String) colorValue);

@@ -60,9 +60,6 @@ public class LoginController {
 	@RequestMapping(value = "/login")
 	public void login (HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-//		userService = (UserService) context.getBean("userService");
-//		adminService = (AdminService) context.getBean("adminService");
-
 		UserDo clientUser = getInfo(request);
 		if (clientUser == null) return;
 
@@ -71,11 +68,9 @@ public class LoginController {
 			handleAdmin(clientUser, request, response);
 			return;
 		}
-
 		ServiceResult<UserDo> result = checkDbOk(clientUser, request, response);
 
 		if (result == null) return;
-
 		UserDo userDB = result.getData();
 		boolean notFound = userDB == null;
 
@@ -274,13 +269,13 @@ public class LoginController {
 			return false;
 		}
 
-		return true;
+		return result.getData();
 	}
 
 	private void handleAdmin (UserDo clientUer, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		AdminDo adminDo = new AdminDo();
-		adminDo.setName(clientUer.getUserName());
+		adminDo.setName(clientUer.getUserId());
 		adminDo.setPassword(clientUer.getUserPassword());
 		ServiceResult<AdminDo> daoResult = null;
 
@@ -363,11 +358,11 @@ public class LoginController {
 		}
 		JSONObject object = new JSONObject(clientMessage);
 
-		String tmpName = null;
+		String tmpId = null;
 		String tmpPassword = null;
 		int permissionLevel = 1;
-		if (object.has("userName")) {
-			tmpName = object.getString("userName");
+		if (object.has("userId")) {
+			tmpId = object.getString("userId");
 		}
 		if (object.has("userPassword")) {
 			tmpPassword = object.getString("userPassword");
@@ -375,17 +370,17 @@ public class LoginController {
 		if (object.has("permissionLevel")) {
 			permissionLevel = object.getInt("permissionLevel");
 		}
-		if (tmpName == null || tmpPassword == null) {
+		if (tmpId == null || tmpPassword == null) {
 			return null;
 		}
-		String name = null;
+		String userId = null;
 		try {
-			name = KitAESCoder.decrypt(tmpName);
+			userId = KitAESCoder.decrypt(tmpId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		user = new UserDo();
-		user.setUserName(name);
+		user.setUserId(userId);
 		if (tmpPassword.length() > PASSWORD_MAX_LENGTH) {
 			tmpPassword = tmpPassword.substring(0, PASSWORD_MAX_LENGTH);
 		}
@@ -418,6 +413,7 @@ public class LoginController {
 
 	/**
 	 * 检查数据库是否操作异常
+	 * (6.5 0:58 更改map参数)
 	 *
 	 * @param clientUser 客户端发送的实体对象
 	 * @param request    请求
@@ -427,9 +423,8 @@ public class LoginController {
 	 */
 	private ServiceResult<UserDo> checkDbOk (UserDo clientUser, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		HashMap<String, String> dbMapParam = new HashMap<String, String>();
-		dbMapParam.put("userName", clientUser.getUserName());
-		ServiceResult<UserDo> result = userService.queryUserInfo(dbMapParam);
+		String userId = clientUser.getUserId();
+		ServiceResult<UserDo> result = userService.queryUserInfo(userId);
 
 		if (!result.isSuccess()) {
 			outToClient(result, request, response);

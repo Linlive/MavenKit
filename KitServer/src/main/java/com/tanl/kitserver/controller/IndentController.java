@@ -195,7 +195,7 @@ public class IndentController {
 				userIdType = SHOPKEEPER_TYPE_VALUE;
 				break;
 			default:
-				userIdType = "userId";
+				userIdType = USER_TYPE_VALUE;
 				break;
 		}
 
@@ -238,7 +238,7 @@ public class IndentController {
 		Gson g = new Gson();
 		IndentViewDo indentViewDo = g.fromJson(object, IndentViewDo.class);
 
-		ServiceResult<List<IndentViewDo>> result = indentService.queryIndent(indentViewDo);
+		ServiceResult<List<IndentViewDo>> result = indentService.queryUserIndentCustom(indentViewDo);
 		if (Client.handleError(result, response)) {
 			return;
 		}

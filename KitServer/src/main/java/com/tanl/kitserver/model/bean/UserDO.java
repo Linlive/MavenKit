@@ -19,7 +19,8 @@ public class UserDo {
 	private String userPhone;
 	private String userEmail;
 	private String userSex;
-	private boolean shopKeeper;
+	private String shopKeeper;
+	private String shopKeeperId;
 
 	private int permissionLevel;
 
@@ -110,12 +111,12 @@ public class UserDo {
 		this.userSex = userSex;
 	}
 
-	public boolean isShopKeeper () {
+	public String getShopKeeper () {
 
 		return shopKeeper;
 	}
 
-	public void setShopKeeper (boolean shopKeeper) {
+	public void setShopKeeper (String shopKeeper) {
 
 		this.shopKeeper = shopKeeper;
 	}
@@ -128,5 +129,15 @@ public class UserDo {
 	public void setPermissionLevel (int permissionLevel) {
 
 		this.permissionLevel = permissionLevel;
+	}
+
+	public String getShopKeeperId () {
+
+		return shopKeeperId;
+	}
+
+	public void setShopKeeperId (String shopKeeperId) {
+
+		this.shopKeeperId = shopKeeperId;
 	}
 }

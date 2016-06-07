@@ -1,12 +1,13 @@
 package test;
 
+import com.google.gson.Gson;
 import com.tanl.kitserver.dao.AdminDao;
-import com.tanl.kitserver.model.bean.AdminDo;
+import com.tanl.kitserver.dao.GoodsDao;
+import com.tanl.kitserver.model.bean.MyPage;
 import com.tanl.kitserver.model.bean.UserDo;
 import com.tanl.kitserver.service.UserService;
 import com.tanl.kitserver.util.ServiceResult;
 import com.tanl.kitserver.util.common.ClientInfoObj;
-import com.tanl.kitserver.util.encryption.KitAESCoder;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +28,7 @@ public class UserTest {
 	UserService userService;
 
 	AdminDao adminDao;
+	GoodsDao goodsDao;
 
 	//@Resource
 	@Before
@@ -36,6 +38,7 @@ public class UserTest {
 		userService = (UserService) context.getBean("userService");
 
 		adminDao = (AdminDao) context.getBean("adminDao");
+		goodsDao = (GoodsDao) context.getBean("goodsDao");
 	}
 
 	@Test
@@ -53,19 +56,35 @@ public class UserTest {
 //		System.out.println(user.getUserId());
 //
 //		ServiceResult serviceResult = userService.insertUser(user);
+//		try {
+//			AdminDo admin = new AdminDo();
+//			admin.setName("tl");
+//			admin.setPassword(KitAESCoder.encrypt("tl"));
+//
+//			adminDao.updateAdminInfo(admin);
+//
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+
 		try {
-			AdminDo admin = new AdminDo();
-			admin.setName("tl");
-			admin.setPassword(KitAESCoder.encrypt("tl"));
+			Gson gson = new Gson();
+			MyPage p = new MyPage();
+			p.setPageNo(10);
+			p.setPageSize(100);
+			String s = gson.toJson(p);
+			System.out.println(s);
 
-			adminDao.updateAdminInfo(admin);
-
+			System.out.println(goodsDao.queryLoadMoreGoods(1, 4));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+
+
 	}
 
 	@Test
@@ -73,7 +92,7 @@ public class UserTest {
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("userName", "cc");
-		ServiceResult<UserDo> dao = userService.queryUserInfo(map);
+		ServiceResult<UserDo> dao = userService.queryUserInfo("cc");
 		Logger logger = LoggerFactory.getLogger(UserTest.class);
 //		System.out.println(result.getData() + "========" + result.isSuccess());
 

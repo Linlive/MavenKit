@@ -3,14 +3,12 @@ package com.tanl.kitserver.dao.impl;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.tanl.kitserver.dao.GoodsDao;
 import com.tanl.kitserver.model.bean.GoodsDo;
+import com.tanl.kitserver.model.bean.MyPage;
 import com.tanl.kitserver.model.bean.UserDo;
 
 import javax.annotation.Resource;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 商品数据库处理层
@@ -49,6 +47,26 @@ public class GoodsDaoImpl implements GoodsDao {
 		return listToListBean(goodsDos);
 	}
 
+	/**
+	 * 数据分页查询
+	 *
+	 * @param start 起始页号 0 开始
+	 * @param size 页面大小
+	 * @return 查询到的数据
+	 * @throws SQLException
+	 */
+	public List<GoodsDo> queryLoadMoreGoods (int start, int size) throws SQLException {
+
+		MyPage myPage = new MyPage();
+		myPage.setPageNo(start);
+		myPage.setStartColumn((start) * size);
+		myPage.setPageSize(size);
+
+		List list = sqlMapClient.queryForList("loadMoreGoods", myPage);
+
+		return listToListBean(list);
+	}
+
 	private List<GoodsDo> listToListBean (List goods) throws SQLException {
 
 		List<GoodsDo> retGoods = new LinkedList<GoodsDo>();
@@ -65,6 +83,39 @@ public class GoodsDaoImpl implements GoodsDao {
 			retGoods.add(tmp);
 		}
 		return retGoods;
+	}
+
+	/**
+	 * 商家查询
+	 * @param user
+	 * @param page
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<GoodsDo> queryShopkeeperGoods (UserDo user, MyPage page) throws SQLException {
+		if(null == user || null == page){
+			return null;
+		}
+		String shopkeeperId = user.getShopKeeperId();
+		int pageNo = page.getPageNo();
+		int pageSize = page.getPageSize();
+		int column = (pageNo + 1) * pageSize;
+
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setStartColumn(column);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("shopkeeperId", shopkeeperId);
+		map.put("startColumn", pageNo);
+		map.put("pageSize", pageSize);
+
+		List goodsDos = sqlMapClient.queryForList("queryGoodsByShopKeeper", map);
+
+		return listToListBean(goodsDos);
+	}
+
+	public Integer getGoodsCount() throws SQLException {
+		return (Integer) sqlMapClient.queryForObject("goodsAllCount");
 	}
 
 	/**

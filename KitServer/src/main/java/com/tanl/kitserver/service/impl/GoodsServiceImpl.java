@@ -2,6 +2,8 @@ package com.tanl.kitserver.service.impl;
 
 import com.tanl.kitserver.dao.GoodsDao;
 import com.tanl.kitserver.model.bean.GoodsDo;
+import com.tanl.kitserver.model.bean.MyPage;
+import com.tanl.kitserver.model.bean.UserDo;
 import com.tanl.kitserver.service.GoodsService;
 import com.tanl.kitserver.util.ServiceResult;
 
@@ -37,10 +39,66 @@ public class GoodsServiceImpl implements GoodsService {
 
 		ServiceResult<List<GoodsDo>> result = new ServiceResult<List<GoodsDo>>();
 		List<GoodsDo> goodsList;
+		int total;
 		try {
 			goodsList = goodsDao.findGoodsFirst();
+			total = goodsDao.getGoodsCount();
+			result.setTotal(total);
+			result.setPageNo(0);
+			/**
+			 * 默认每次给出两条数据
+			 */
+			result.setPageSize(5);
 			result.setSuccess(true);
 			result.setData(goodsList);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public ServiceResult<List<GoodsDo>> queryFreshGoods () {
+
+		return null;
+	}
+
+	public ServiceResult<List<GoodsDo>> queryLoadMoreGoods (int start, int size) {
+		ServiceResult<List<GoodsDo>> result = new ServiceResult<List<GoodsDo>>();
+		List<GoodsDo> goodsDoList;
+		int total = 0;
+		try {
+			goodsDoList = goodsDao.queryLoadMoreGoods(start, size);
+			total = goodsDao.getGoodsCount();
+			result.setPageNo(start);
+			result.setPageSize(size);
+			result.setTotal(total);
+			result.setSuccess(true);
+			result.setData(goodsDoList);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * 商家查询商品，根据商家的Id查询
+	 *
+	 * @param user
+	 * @param page
+	 * @return
+	 */
+	public ServiceResult<List<GoodsDo>> queryShopkeeperGoods (UserDo user, MyPage page) {
+
+		ServiceResult<List<GoodsDo>> result = new ServiceResult<List<GoodsDo>>();
+		List<GoodsDo> data;
+		try {
+			data = goodsDao.queryShopkeeperGoods(user, page);
+			result.setSuccess(true);
+			result.setData(data);
+			result.setPageNo(page.getPageNo());
+			result.setPageSize(page.getPageSize());
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

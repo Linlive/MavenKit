@@ -15,12 +15,12 @@
 	</select>
 
 	<parameterMap id="viewIndentMap" class="java.util.HashMap">
-		<parameter property="buyerId" javaType="String"/>
-		<parameter property="shopKeeperId" javaType="String"/>
-		<parameter property="indentState" javaType="Integer"/>
+		<parameter property="buyerId" javaType="Object"/>
+		<parameter property="shopKeeperId" javaType="Object"/>
+		<parameter property="indentState" javaType="Object"/>
 	</parameterMap>
 
-	<select id="userQueryIndentByState" parameterMap="viewIndentMap" resultClass="Indent">
+	<select id="userQueryIndentByState" parameterClass="HashMap" resultClass="Indent">
 		SELECT * FROM tb_indent WHERE buyerId = #buyerId# AND indentState = #indentState#
 	</select>
 	<select id="shopkeeperQueryIndentByState" parameterMap="viewIndentMap" resultClass="Indent">
@@ -29,7 +29,11 @@
 
 
 	<select id="queryIndentByUserId" parameterClass="String" resultClass="Indent">
-		SELECT * FROM tb_indent WHERE buyerId = #userId#;
+		SELECT * FROM tb_indent WHERE buyerId = #userId# or shopKeeperId = #userId#;
+	</select>
+
+	<select id="queryIndentByShopkeeperId" parameterClass="String" resultClass="Indent">
+		SELECT * FROM tb_indent WHERE shopKeeperId = #shopKeeperId#;
 	</select>
 
 

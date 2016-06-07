@@ -36,35 +36,45 @@ public class IndentDaoImpl implements IndentDao {
 		return false;
 	}
 
-	public IndentDo viewIndent (String indentNumber) throws SQLException {
+	public IndentDo queryUserIndentCustom (String indentNumber) throws SQLException {
 		return (IndentDo) sqlMapClient.insert("queryIndent", indentNumber);
 	}
 
-	public List<IndentViewDo> viewIndent (IndentViewDo indentViewDo) throws SQLException {
+	public List<IndentViewDo> queryUserIndentCustom (IndentViewDo indentViewDo) throws SQLException {
 		if(indentViewDo == null){
 			return null;
 		}
 		int stateId = findStateId(indentViewDo.getIndentState());
 
-		if(indentViewDo.getShopkeeperId() == null || indentViewDo.getShopkeeperId().length() <= 0){
+		if(indentViewDo.getShopkeeperId() != null && indentViewDo.getShopkeeperId().length() > 0){
+			if(stateId == 0){
+				return viewIndentByUserId(indentViewDo.getShopkeeperId());
+			}
+			return viewIndentByShopkeeperId(indentViewDo.getShopkeeperId());
+		}
+		if(indentViewDo.getBuyerId() != null && indentViewDo.getBuyerId().length() > 0){
+
+			if(stateId == 0){
+				return viewIndentByUserId(indentViewDo.getBuyerId());
+			}
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("buyerId", indentViewDo.getBuyerId());
 			map.put("indentState", stateId);
 			List retList = sqlMapClient.queryForList("userQueryIndentByState", map);
-			return changeIndentToIndeView(retList);
+			return changeIndentToIndentView(retList);
 		}
-		return shopkeeperQueryIndent(indentViewDo.getShopkeeperId(), stateId);
+		return null;
 	}
 
-	private List<IndentViewDo> shopkeeperQueryIndent(String shopkeeperId, int stateId) throws SQLException {
+	private List<IndentViewDo> queryShopkeeperIndentCustom (String shopkeeperId, int stateId) throws SQLException {
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("shopkeeperId", shopkeeperId);
 		map.put("indentState", stateId);
 		List retList = sqlMapClient.queryForList("shopkeeperQueryIndentByState", map);
-		return changeIndentToIndeView(retList);
+		return changeIndentToIndentView(retList);
 	}
-	private List<IndentViewDo> changeIndentToIndeView(List retList) throws SQLException {
+	private List<IndentViewDo> changeIndentToIndentView (List retList) throws SQLException {
 		List<IndentViewDo> resultList = new LinkedList<IndentViewDo>();
 		IndentViewDo viewDo;
 		for(Object o : retList){
@@ -88,12 +98,25 @@ public class IndentDaoImpl implements IndentDao {
 		viewDo.setPictureUrls(goodsDao.findGoodsUrl(goodsId));
 		viewDo.setGoodsDesc(goodsDao.findGoodsDesc(goodsId));
 		viewDo.setIndentState(findStateValue(indentDo.getIndentState()));
+		viewDo.setGoodsId(goodsId);
 		return viewDo;
 	}
 
 	public List<IndentViewDo> viewIndentByUserId (String buyerId) throws SQLException {
 		List<IndentViewDo> resultList = new LinkedList<IndentViewDo>();
 		List daoResult = sqlMapClient.queryForList("queryIndentByUserId", buyerId);
+		IndentViewDo viewDo;
+		for(Object o : daoResult){
+			IndentDo indentDo = (IndentDo) o;
+			viewDo = changeIndentToIndentViewDo(indentDo);
+			resultList.add(viewDo);
+		}
+		return resultList;
+	}
+
+	public List<IndentViewDo> viewIndentByShopkeeperId (String shopkeeper) throws SQLException {
+		List<IndentViewDo> resultList = new LinkedList<IndentViewDo>();
+		List daoResult = sqlMapClient.queryForList("queryIndentByShopkeeperId", shopkeeper);
 		IndentViewDo viewDo;
 		for(Object o : daoResult){
 			IndentDo indentDo = (IndentDo) o;
@@ -142,6 +165,9 @@ public class IndentDaoImpl implements IndentDao {
 	 * @throws SQLException
 	 */
 	private int findStateId(String stateValue) throws SQLException {
+		if("全部".equals(stateValue)){
+			return 0;
+		}
 		return (Integer) sqlMapClient.queryForObject("findState", stateValue);
 	}
 

@@ -1,18 +1,43 @@
 package test;
 
-import com.tanl.kitserver.util.email.EmailSender;
+import com.google.zxing.WriterException;
 
 import javax.mail.MessagingException;
 
 /**
+ * d
  * Created by Administrator on 2016/4/26.
  */
 public class AllTest {
 
-	public static void main (String[] args) throws MessagingException {
-		if(EmailSender.sendTo("290754291@qq.com")){
-			System.out.println("发送成功！！！！");
-		}
+	public static void main (String[] args) throws MessagingException, WriterException {
+
+//		String text = "http://192.168.1.222:8080/KitServer/downloadApk";
+////		String text = "http:/192.168.1.222:8080/K";
+//		int width = 350;
+//		int height = 350;
+//		String format = "png";
+//		Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
+//		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+//		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+//		hints.put(EncodeHintType.MARGIN, 1);//设置二维码边的空度，非负数
+//
+//
+//		BitMatrix bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, width, height,hints);
+//		File outputFile = new File("new.png");
+//		System.out.println("path = " + outputFile.getAbsolutePath());
+//		try {
+//			MatrixToImageWriter.writeToStream(bitMatrix, format, new FileOutputStream(outputFile));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
+//		String pass = "TanLin123";
+//		System.out.println(NormalCheck.passwordStrong(pass));
+
+//		if(EmailSender.sendTo("290754291@qq.com")){
+//			System.out.println("发送成功！！！！");
+//		}
 
 //		MailSenderInfo mailInfo = new MailSenderInfo();
 //		mailInfo.setMailServerHost("smtp.163.com");

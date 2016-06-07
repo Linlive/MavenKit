@@ -1,6 +1,7 @@
 package com.tanl.kitserver.dao;
 
 import com.tanl.kitserver.model.bean.GoodsDo;
+import com.tanl.kitserver.model.bean.MyPage;
 import com.tanl.kitserver.model.bean.UserDo;
 
 import java.sql.SQLException;
@@ -16,9 +17,15 @@ public interface GoodsDao {
 	// 根据商家id 查询商品
 	List<GoodsDo> findGoodsByShopKeeperId(UserDo userDo) throws SQLException;
 	List<GoodsDo> findGoodsFirst() throws SQLException;
+	List<GoodsDo> queryLoadMoreGoods(int start, int size) throws SQLException;
+	List<GoodsDo> queryShopkeeperGoods(UserDo user, MyPage page) throws SQLException;
+
+
 
 	List<String> findGoodsUrl(String goodsId) throws SQLException;
 	String findGoodsDesc(String goodsId) throws SQLException;
+
+	Integer getGoodsCount() throws SQLException;
 
 	//type
 	Integer findBrand(String brandValue) throws SQLException;

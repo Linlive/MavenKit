@@ -14,6 +14,7 @@ public class IndentViewDo {
 	private String shopkeeperId;
 
 	private List<String> pictureUrls;
+	private String goodsId;
 	private String goodsName;
 	private String goodsDesc;
 	private String indentState;
@@ -36,6 +37,16 @@ public class IndentViewDo {
 	public void setPictureUrls (List<String> pictureUrls) {
 
 		this.pictureUrls = pictureUrls;
+	}
+
+	public String getGoodsId () {
+
+		return goodsId;
+	}
+
+	public void setGoodsId (String goodsId) {
+
+		this.goodsId = goodsId;
 	}
 
 	public String getGoodsName () {
