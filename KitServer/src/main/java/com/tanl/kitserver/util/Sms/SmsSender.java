@@ -55,12 +55,12 @@ public class SmsSender {
 				new NameValuePair("Uid", "nil_tan"),
 				new NameValuePair("Key", "dfeb60885c7d53ab6b8c"),
 				new NameValuePair("smsMob", userObj.getString("phone")),
-				new NameValuePair("smsText", "验证码:" + code)};
+				new NameValuePair("smsText", "验证码:" + code + "，5分钟内有效。如非本人操作，请忽略。")};
 		post.setRequestBody(data);
 		client.executeMethod(post);
 
 		String result = new String(post.getResponseBodyAsString().getBytes("utf8"));
-		System.out.println(result); //打印返回消息状态
+		System.out.println("短信已发送至" + userObj.getString("phone") + "数量：" + result); //打印返回消息状态
 		post.releaseConnection();
 
 		SessionWrapper sw = new SessionWrapper();

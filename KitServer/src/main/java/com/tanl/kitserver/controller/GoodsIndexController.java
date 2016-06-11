@@ -97,20 +97,22 @@ public class GoodsIndexController {
 
 	/**
 	 * 商家查看
+	 *
 	 * @param request
 	 * @param response
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/getGoodsByShopkeeper")
 	public void getMyGoods (HttpServletRequest request, HttpServletResponse response) throws IOException {
+
 		String clientStr = Client.readFromClient(request.getReader());
-		if(null == clientStr || clientStr.length() == 0){
+		if (null == clientStr || clientStr.length() == 0) {
 			response.sendError(ServerCode.DATA_FORMAT_ERROR);
 			return;
 		}
 		JsonParser jp = new JsonParser();
 		JsonElement je = jp.parse(clientStr);
-		if(!je.isJsonObject()){
+		if (!je.isJsonObject()) {
 			response.sendError(ServerCode.DATA_FORMAT_ERROR);
 			return;
 		}
@@ -118,27 +120,62 @@ public class GoodsIndexController {
 		UserDo user = null;
 		MyPage page = null;
 		Gson g;
-		if(clientObj.has("user")){
+		if (clientObj.has("user")) {
 			JsonElement jo = clientObj.get("user");//.getAsJsonObject("user");
 			g = new Gson();
 			user = g.fromJson(jo, UserDo.class);
 		}
-		if(null == user){
+		if (null == user) {
 			response.sendError(ServerCode.DATA_FORMAT_ERROR);
 			return;
 		}
-		if(clientObj.has("page")){
+		if (clientObj.has("page")) {
 			JsonObject jo = clientObj.getAsJsonObject("page");
 			g = new Gson();
 			page = g.fromJson(jo, MyPage.class);
 		}
-		if(null == page){
+		if (null == page) {
 			response.sendError(ServerCode.DATA_FORMAT_ERROR);
 			return;
 		}
 		//所有格式均正确，开始进行数据库的查询操作
 		ServiceResult<List<GoodsDo>> goodsDoResult = goodsService.queryShopkeeperGoods(user, page);
-		if (Client.handleError(goodsDoResult, response)){
+		if (Client.handleError(goodsDoResult, response)) {
+			response.sendError(ServerCode.DATABASE_OUT_NULL);
+			return;
+		}
+		sendDataPage(goodsDoResult, response);
+	}
+
+	@RequestMapping(value = "/getGoodsBySpecialKey")
+	public void getSpecialGoods (HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String clientStr = Client.readFromClient(request.getReader());
+		if (null == clientStr || clientStr.length() == 0) {
+			response.sendError(ServerCode.DATA_FORMAT_ERROR);
+			return;
+		}
+		JsonParser jp = new JsonParser();
+		JsonElement je = jp.parse(clientStr);
+		if (!je.isJsonObject()) {
+			response.sendError(ServerCode.DATA_FORMAT_ERROR);
+			return;
+		}
+		JsonObject clientObj = je.getAsJsonObject();
+		String key = null;
+		MyPage page = null;
+		if(clientObj.has("key")){
+			key = clientObj.get("key").getAsString();
+		}
+		if(clientObj.has("page")){
+			Gson g = new Gson();
+			page = g.fromJson(clientObj.get("page").getAsJsonObject(), MyPage.class);
+		}
+		if(null == key || null == page){
+			response.sendError(ServerCode.DATA_FORMAT_ERROR);
+			return;
+		}
+		ServiceResult<List<GoodsDo>> goodsDoResult = goodsService.querySpecialGoods(key, page);
+		if (Client.handleError(goodsDoResult, response)) {
 			response.sendError(ServerCode.DATABASE_OUT_NULL);
 			return;
 		}

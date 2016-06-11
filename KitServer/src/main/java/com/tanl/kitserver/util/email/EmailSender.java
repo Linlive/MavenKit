@@ -31,12 +31,14 @@ public class EmailSender {
 		// 设置环境信息
 		Session session = Session.getInstance(props);
 
+		//String code = GenerateRandomString.generateVerificationString(6);
+
 		try {
 			// 创建邮件对象
 			Message msg = new MimeMessage(session);
 			msg.setSubject("Travel kit");
 			// 设置邮件内容
-			msg.setText("找回密码请点击\nhttp://192.168.1.222:8080/KitServer\n请勿回复此邮件");
+			msg.setText("找回密码请点击\nhttp://192.168.1.222:8080/KitServer\n请勿回复此邮件\n");// + "code is " + code);
 			// 设置发件人
 			msg.setFrom(new InternetAddress(emailFrom));
 

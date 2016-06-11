@@ -7,9 +7,12 @@
 	<typeAlias alias="User" type="com.tanl.kitserver.model.bean.UserDo"/>
 
 	<insert id="insertGoods" parameterClass="Goods">
-		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice, goodsExtras)
-		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#, #goodsExtras#)
+		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice, goodsRepertory, goodsExtras)
+		VALUES (#goodsId#, #shopKeeperId#, #goodsName#, #goodsBrand#, #goodsType#, #goodsSize#, #goodsColor#, #goodsPlace#, #goodsPrice#, #goodsRepertory#, #goodsExtras#)
 	</insert>
+	<update id="buyGoods">
+		UPDATE tb_goods SET goodsRepertory = goodsRepertory - 1 WHERE goodsId = #goodsId#
+	</update>
 
 	<insert id="insertGoods1" parameterClass="Goods">
 		INSERT INTO tb_goods (goodsId, shopKeeperId, goodsName, goodsBrand, goodsType, goodsSize, goodsColor, goodsPlace, goodsPrice)
@@ -124,17 +127,22 @@
 	<select id="queryGoodsByShopKeeper" parameterClass="HashMap" resultClass="Goods">
 		SELECT *
 		FROM tb_goods
-		WHERE shopkeeperId = $shopkeeperId$ ORDER BY  uploadTime LIMIT $startColumn$, $pageSize$
+		WHERE shopkeeperId = #shopkeeperId# ORDER BY  uploadTime LIMIT #startColumn#, #pageSize#
 	</select>
+	<select id="queryGoodsBySpecialKey" parameterClass="HashMap" resultClass="Goods">
+		SELECT *
+		FROM tb_goods
+		WHERE shopkeeperId LIKE '$shopkeeperId$' or goodsName LIKE '$goodsName$' ORDER BY  uploadTime LIMIT $startColumn$, $pageSize$
+	</select>
+
+
+
 	<select id="queryGoodsDefault" resultClass="Goods">
 		SELECT *
 		FROM tb_goods
 		ORDER BY uploadTime DESC
 		LIMIT 5;
 	</select>
-
-
-
 
 	<select id="loadMoreGoods" parameterClass="page" resultClass="Goods">
 		SELECT *

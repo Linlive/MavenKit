@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface GoodsDao {
 	int addGoods (GoodsDo goodsDo) throws SQLException;
+	int butGoods (String goodsId) throws SQLException;
 
 	public GoodsDo findSingleGoods() throws SQLException;
 	// 根据商家id 查询商品
@@ -19,6 +20,7 @@ public interface GoodsDao {
 	List<GoodsDo> findGoodsFirst() throws SQLException;
 	List<GoodsDo> queryLoadMoreGoods(int start, int size) throws SQLException;
 	List<GoodsDo> queryShopkeeperGoods(UserDo user, MyPage page) throws SQLException;
+	List<GoodsDo> querySpecialGoods(String key, MyPage page) throws SQLException;
 
 
 

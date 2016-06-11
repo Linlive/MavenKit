@@ -242,9 +242,9 @@ public class PhotoUploadController {
 				e.printStackTrace();
 			}
 		}
-		int startIndex = f.getAbsolutePath().lastIndexOf("img");
+		int startIndex = f.getAbsolutePath().lastIndexOf("KitServer");
 
-		return f.getAbsolutePath().substring(startIndex - 1);
+		return f.getAbsolutePath().substring(startIndex + "KitServer".length());
 	}
 
 	/**
@@ -275,10 +275,11 @@ public class PhotoUploadController {
 		}
 	}
 	private String createDir(String dirPath){
-		File dir = new File(dirPath);
+		String path = dirPath.replace("/", "\\");
+		File dir = new File(path);
 		if(!dir.exists() && !dir.mkdirs()){
 			return rootPath;
 		}
-		return dirPath;
+		return path;
 	}
 }

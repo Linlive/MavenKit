@@ -105,6 +105,31 @@ public class GoodsServiceImpl implements GoodsService {
 		return result;
 	}
 
+	/**
+	 * 搜索用户指定的关键字商品
+	 * @param key
+	 * @param page
+	 * @return
+	 */
+	public ServiceResult<List<GoodsDo>> querySpecialGoods (String key, MyPage page) {
+
+		ServiceResult<List<GoodsDo>> result = new ServiceResult<List<GoodsDo>>();
+		List<GoodsDo> data;
+
+		try {
+			data = goodsDao.querySpecialGoods(key, page);
+			result.setSuccess(true);
+			result.setData(data);
+			result.setPageNo(page.getPageNo());
+			result.setPageSize(page.getPageSize());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 	public ServiceResult<Integer> findBrand (String brandValue) {
 
 		ServiceResult<Integer> result = new ServiceResult<Integer>();

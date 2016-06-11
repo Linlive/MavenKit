@@ -21,7 +21,7 @@ public class DownloadApk {
 	public void downloadByUrl (HttpServletRequest request, HttpServletResponse response) {
 
 		String root = ServerRootPath.getRootPath(request);
-		File apk = new File(root, "./animal.rmvb");
+		File apk = new File(root, "/Travel-kit.apk");
 		if (!apk.exists()) {
 			try {
 				response.sendError(ServerCode.APK_DOES_NOT_EXSIST_ERROR);

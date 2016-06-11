@@ -19,6 +19,7 @@ public interface GoodsService {
 
 
 	ServiceResult<List<GoodsDo>> queryShopkeeperGoods (UserDo user, MyPage page);
+	ServiceResult<List<GoodsDo>> querySpecialGoods (String key, MyPage page);
 
 
 	ServiceResult<Integer> findBrand(String brandValue);

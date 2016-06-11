@@ -7,8 +7,10 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
+ * 实体到json的转换
  * Created by Administrator on 2016/5/3.
  */
+@Deprecated
 public class EntityObj2JsonObj<O> {
 	private Map mMap;
 	private O mDataDo;

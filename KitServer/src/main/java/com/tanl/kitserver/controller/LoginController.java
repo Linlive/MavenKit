@@ -44,6 +44,8 @@ public class LoginController {
 	final boolean LOGIN_STATUS_SUCCESS = true;
 	final boolean LOGIN_STATUS_FAILED = false;
 
+	final int SESSION_ACTIVE_TIME = 5 * 60 * 100;
+
 	static String sessionId = "";
 
 	static HashMap<String, String> userSessionMap;
@@ -141,7 +143,7 @@ public class LoginController {
 		}
 		String emailAddr = null;
 		String phoneNumber = null;
-		if (jsonObject.has("eamil")) {
+		if (jsonObject.has("email")) {
 			emailAddr = jsonObject.getString("email");
 		}
 		if (jsonObject.has("phone")) {
@@ -152,6 +154,7 @@ public class LoginController {
 		}
 		if (NormalCheck.isPhoneNumber(phoneNumber)) {
 			sessionId = request.getSession().getId();
+			request.getSession().setMaxInactiveInterval(SESSION_ACTIVE_TIME);
 			SmsSender.sendSms(jsonObject, sessionId, response);
 			userSessionMap = SmsSender.getUserSessionMap();
 			userCodeMap = SmsSender.getUserCodeMap();

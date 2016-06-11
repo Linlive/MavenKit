@@ -22,8 +22,11 @@ public class GoodsDaoImpl implements GoodsDao {
 	public int addGoods (GoodsDo goodsDo) throws SQLException {
 
 		sqlMapClient.insert("insertGoods", goodsDo);
-
 		return 0;
+	}
+
+	public int butGoods (String goodsId) throws SQLException {
+		return sqlMapClient.update("buyGoods", goodsId);
 	}
 
 	public GoodsDo findSingleGoods () throws SQLException {
@@ -51,7 +54,7 @@ public class GoodsDaoImpl implements GoodsDao {
 	 * 数据分页查询
 	 *
 	 * @param start 起始页号 0 开始
-	 * @param size 页面大小
+	 * @param size  页面大小
 	 * @return 查询到的数据
 	 * @throws SQLException
 	 */
@@ -87,13 +90,15 @@ public class GoodsDaoImpl implements GoodsDao {
 
 	/**
 	 * 商家查询
+	 *
 	 * @param user
 	 * @param page
 	 * @return
 	 * @throws SQLException
 	 */
 	public List<GoodsDo> queryShopkeeperGoods (UserDo user, MyPage page) throws SQLException {
-		if(null == user || null == page){
+
+		if (null == user || null == page) {
 			return null;
 		}
 		String shopkeeperId = user.getShopKeeperId();
@@ -114,7 +119,26 @@ public class GoodsDaoImpl implements GoodsDao {
 		return listToListBean(goodsDos);
 	}
 
-	public Integer getGoodsCount() throws SQLException {
+	public List<GoodsDo> querySpecialGoods (String key, MyPage page) throws SQLException {
+
+		if (null == key || null == page) {
+			return null;
+		}
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("shopkeeperId", key);
+		map.put("startColumn", page.getPageNo());
+		map.put("pageSize", page.getPageSize());
+		List<GoodsDo> listRet;
+//		List goodsDosShop = sqlMapClient.queryForList("queryGoodsBySpecialKey", map);
+//		listRet = listToListBean(goodsDosShop);
+		map.put("goodsName", "%" + key + "%");
+		List goodsDosName = sqlMapClient.queryForList("queryGoodsBySpecialKey", map);
+		listRet = listToListBean(goodsDosName);
+		return listRet;
+	}
+
+	public Integer getGoodsCount () throws SQLException {
+
 		return (Integer) sqlMapClient.queryForObject("goodsAllCount");
 	}
 

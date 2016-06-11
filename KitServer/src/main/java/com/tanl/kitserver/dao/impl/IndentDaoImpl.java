@@ -24,7 +24,8 @@ public class IndentDaoImpl implements IndentDao {
 	GoodsDao goodsDao;
 
 	public boolean createIndent (IndentDo indentDo) throws SQLException {
-		sqlMapClient.insert("createIndent", indentDo);
+		Object o1 = sqlMapClient.insert("createIndent", indentDo);
+		int line = goodsDao.butGoods(indentDo.getGoodsId());
 		return true;
 	}
 

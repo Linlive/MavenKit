@@ -12,6 +12,8 @@
 <p>
     this is the index page of my server!</p>
 
-<img src="http://localhost:8080/KitServer/TravelKit.jpg" title="title"/><t/><a href="/KitServer/downloadApk">下载apk到本地</a>
+<img src="/KitServer/TravelKit.jpg" title="title"/><t/>
+<a href="/KitServer/showTwoDimension">显示二维码</a>
+<a href="/KitServer/downloadApk">下载apk到本地</a>
 </body>
 </html>
