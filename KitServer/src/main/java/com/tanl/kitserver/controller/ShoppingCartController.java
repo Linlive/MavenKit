@@ -56,12 +56,12 @@ public class ShoppingCartController {
 
 		String clientInfo = Client.readFromClient(new BufferedReader(request.getReader()));
 		JSONObject object = new JSONObject(clientInfo);
-		if(!object.has("goodsId")){
+		if(!object.has("goodsId") || !object.has("userId")){
 			return;
 		}
 		String goodsId = object.getString("goodsId");
-
-		ServiceResult<Boolean> result = cartService.deleteFromShoppingCart(goodsId);
+		String userId = object.getString("userId");
+		ServiceResult<Boolean> result = cartService.deleteFromShoppingCart(goodsId, userId);
 		if (Client.handleError(result, response)) return;
 
 		JSONObject objOut = new JSONObject();
@@ -93,6 +93,29 @@ public class ShoppingCartController {
 		Client.writeToClient(response.getWriter(), cartGson.toJson(cartDos));
 	}
 
+	@RequestMapping(value = "/addOrSubCart")
+	public void addOrSubCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String clientStr = Client.readFromClient(request.getReader());
+		if(null == clientStr || clientStr.length() == 0){
+			response.sendError(ServerCode.DATA_FORMAT_ERROR);
+			return;
+		}
+		JSONObject clientObj = new JSONObject(clientStr);
+		if(!clientObj.has("userId") || !clientObj.has("goodsId") || !clientObj.has("add")){
+			response.sendError(ServerCode.DATA_FORMAT_ERROR);
+			return;
+		}
+		String userId = clientObj.getString("userId");
+		String goodsId = clientObj.getString("goodsId");
+		boolean add = clientObj.getBoolean("add");
+		ServiceResult<Boolean> result = cartService.addOrSub(userId, goodsId, add);
+		if(Client.handleError(result, response)){
+			return;
+		}
+		JSONObject object = new JSONObject();
+		object.put("status", result.getData());
+		Client.writeToClient(response.getWriter(), object);
+	}
 
 	private ShoppingCartDo getClientInfo(HttpServletRequest request) throws IOException {
 		ShoppingCartDo shoppingCartDo = new ShoppingCartDo();

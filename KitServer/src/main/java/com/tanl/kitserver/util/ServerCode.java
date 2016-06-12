@@ -6,11 +6,11 @@ package com.tanl.kitserver.util;
  */
 public class ServerCode {
 	//room
-	public static final String SERVER_ADDRESS = "http://192.168.1.222:8080/KitServer";
+//	public static final String SERVER_ADDRESS = "http://192.168.1.222:8080/KitServer";
 	//hp pc
 //	public static final String SERVER_ADDRESS = "http://192.168.56.2:8080/KitServer";
 	//ali server
-//	public static final String SERVER_ADDRESS = "http://42.96.138.253:8080/KitServer";
+	public static final String SERVER_ADDRESS = "http://42.96.138.253:8080/KitServer";
 //	public static final String SERVER_ADDRESS = "http://127.0.0.1:8080/KitServer";
 
 	public static final int SERVER_REQUEST_OK = 200;

@@ -7,6 +7,7 @@ import com.tanl.kitserver.model.bean.ShoppingCartDo;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,19 +20,26 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 
 	public boolean addToShoppingCart (ShoppingCartDo cartDo) throws SQLException {
 
-		Object obj = queryCart(cartDo.getGoodsId());
+		Object obj = queryCart(cartDo.getGoodsId(), cartDo.getUserId());
 		if (null == obj) {
 			sqlMapClient.insert("addToCart", cartDo);
 		} else {
 			Integer num = (Integer) obj + 1;
+			HashMap<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("goodsId", cartDo.getGoodsId());
+			paramMap.put("userId", cartDo.getUserId());
+			paramMap.put("num", num);
 			sqlMapClient.update("updateCart", num);
 		}
 		return true;
 	}
 
-	public boolean deleteFromShoppingCart (String goodsId) throws SQLException {
+	public boolean deleteFromShoppingCart (String goodsId, String userId) throws SQLException {
 
-		sqlMapClient.delete("deleteFromCart", goodsId);
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("goodsId", goodsId);
+		map.put("userId", userId);
+		sqlMapClient.delete("deleteFromCart", map);
 		return true;
 	}
 
@@ -49,7 +57,25 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 		return cartDos;
 	}
 
+	public boolean addOrSub (String userId, String goodsId, boolean add) throws SQLException {
+
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("userId", userId);
+		paramMap.put("goodsId", goodsId);
+		int line;
+		if (add) {
+			line = sqlMapClient.update("addChooseNumber", paramMap);
+		} else {
+			line = sqlMapClient.update("subChooseNumber", paramMap);
+		}
+		if (line >= 1) {
+			return true;
+		}
+		return false;
+	}
+
 	private void queryTypeSoOn (ShoppingCartDo cartDo) throws SQLException {
+
 		Object typeValue = sqlMapClient.queryForObject("queryTypeValue", cartDo.getGoodsType());
 		Object sizeValue = sqlMapClient.queryForObject("querySizeValue", cartDo.getGoodsSize());
 		Object colorValue = sqlMapClient.queryForObject("queryColorValue", cartDo.getGoodsColor());
@@ -63,8 +89,11 @@ public class ShoppingCartDaoImpl implements ShoppingCartDao {
 		cartDo.setGoodsExtra((String) extraValue);
 	}
 
-	private Object queryCart (String goodsId) throws SQLException {
+	private Object queryCart (String goodsId, String userId) throws SQLException {
 
-		return sqlMapClient.queryForObject("queryChooseNumber", goodsId);
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("goodsId", goodsId);
+		paramMap.put("userId", userId);
+		return sqlMapClient.queryForObject("queryChooseNumber", paramMap);
 	}
 }

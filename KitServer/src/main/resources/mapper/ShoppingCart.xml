@@ -9,15 +9,15 @@
 		values (#userId#, #goodsId#, #goodsChooseNumber#, #goodsPrice#, #goodsSize#, #goodsColor#, #goodsType#, #shopKeeperId#)
 	</insert>
 	<update id="updateCart" parameterClass="Integer">
-		UPDATE tb_shopping_cart SET goodsChooseNumber = #num#
+		UPDATE tb_shopping_cart SET goodsChooseNumber = #num# WHERE userId = #userId# AND goodsId = #goodsId#
 	</update>
 
-	<delete id="deleteFromCart" parameterClass="String">
-		DELETE FROM tb_shopping_cart WHERE goodsId = #goodsId#
+	<delete id="deleteFromCart" parameterClass="HashMap">
+		DELETE FROM tb_shopping_cart WHERE goodsId = #goodsId# AND userId = #userId#
 	</delete>
 
-	<select id="queryChooseNumber" parameterClass="String" resultClass="Integer">
-		SELECT goodsChooseNumber FROM tb_shopping_cart WHERE goodsId = #goodsId#
+	<select id="queryChooseNumber" parameterClass="HashMap" resultClass="Integer">
+		SELECT goodsChooseNumber FROM tb_shopping_cart WHERE goodsId = #goodsId# and userId = #userId#
 	</select>
 
 	<!--<select id="queryBrand" parameterClass="Integer" resultClass="String">-->
@@ -42,4 +42,11 @@
 		SELECT * FROM tb_shopping_cart WHERE userId = #userId#
 	</select>
 
+	<update id="addChooseNumber" parameterClass="HashMap">
+		UPDATE tb_shopping_cart SET goodsChooseNumber = goodsChooseNumber + 1 WHERE goodsId = #goodsId# AND userId = #userId#
+	</update>
+
+	<update id="subChooseNumber" parameterClass="HashMap">
+		UPDATE tb_shopping_cart SET goodsChooseNumber = goodsChooseNumber - 1 WHERE goodsId = #goodsId# AND userId = #userId#
+	</update>
 </sqlMap>

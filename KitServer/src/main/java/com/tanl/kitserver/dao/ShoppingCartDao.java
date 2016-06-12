@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface ShoppingCartDao {
 	boolean addToShoppingCart(ShoppingCartDo cartDo) throws SQLException;
-	boolean deleteFromShoppingCart(String goodsId) throws SQLException;
+	boolean deleteFromShoppingCart(String goodsId, String userId) throws SQLException;
 	List<ShoppingCartDo> queryShoppingCart(String userId) throws SQLException;
+
+	boolean addOrSub(String userId, String goodsId, boolean add) throws SQLException;
 }

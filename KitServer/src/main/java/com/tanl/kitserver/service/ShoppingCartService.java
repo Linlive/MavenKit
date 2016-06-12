@@ -13,7 +13,9 @@ public interface ShoppingCartService {
 
 	ServiceResult<Boolean> addToShoppingCart (ShoppingCartDo shoppingCartDo);
 
-	ServiceResult<Boolean> deleteFromShoppingCart (String goodsId);
+	ServiceResult<Boolean> deleteFromShoppingCart (String goodsId, String userId);
 
 	ServiceResult<List<ShoppingCartDo>> queryShoppingCart (String userId);
+
+	ServiceResult<Boolean> addOrSub(String userId, String goodsId, boolean add);
 }

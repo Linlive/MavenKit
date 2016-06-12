@@ -37,11 +37,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 		return result;
 	}
 
-	public ServiceResult<Boolean> deleteFromShoppingCart (String goodsId) {
+	public ServiceResult<Boolean> deleteFromShoppingCart (String goodsId, String userId) {
 
 		ServiceResult<Boolean> result = new ServiceResult<Boolean>();
 		try {
-			boolean success = shoppingCartDao.deleteFromShoppingCart(goodsId);
+			boolean success = shoppingCartDao.deleteFromShoppingCart(goodsId, userId);
 			result.setSuccess(true);
 			result.setData(success);
 
@@ -65,6 +65,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 		}
 		return result;
 	}
+
+	public ServiceResult<Boolean> addOrSub (String userId, String goodsId, boolean add) {
+		ServiceResult<Boolean> result = new ServiceResult<Boolean>();
+		try {
+			boolean ret = shoppingCartDao.addOrSub(userId, goodsId, add);
+			result.setSuccess(true);
+			result.setData(ret);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	private void setImages(List<ShoppingCartDo> cartList) throws SQLException {
 		for(ShoppingCartDo cartDo : cartList){
 			List<String> urls = goodsDao.findGoodsUrl(cartDo.getGoodsId());
